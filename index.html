@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Partidinha - A rede social dos atletas de final de semana</title>
-    <meta name="description" content="Organize seus jogos, acompanhe estatísticas e compartilhe a resenha com os amigos. Futebol, beach tennis, futevôlei e mais.">
+    <meta name="description"
+        content="Organize seus jogos, acompanhe estatísticas e compartilhe a resenha com os amigos. Futebol, beach tennis, futevôlei e mais.">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -29,24 +31,29 @@
     </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
         body {
             font-family: 'Inter', sans-serif;
         }
+
         .gradient-text {
             background: linear-gradient(135deg, #00d4ff, #00ff7f);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
+
         .glow {
             box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
         }
+
         .card-hover:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 40px rgba(0, 212, 255, 0.2);
         }
     </style>
 </head>
+
 <body class="bg-primary text-white">
     <!-- Header -->
     <header class="fixed top-0 w-full bg-primary-dark/90 backdrop-blur-sm z-50 border-b border-card">
@@ -55,7 +62,8 @@
                 <img src="images/logo.jpeg" alt="Partidinha" class="w-10 h-10 rounded-lg">
                 <span class="text-xl font-bold">Partidinha</span>
             </div>
-            <a href="#waitlist" class="bg-accent hover:bg-accent-light text-primary-dark font-semibold px-4 py-2 rounded-lg transition-all">
+            <a href="#waitlist"
+                class="bg-accent hover:bg-accent-light text-primary-dark font-semibold px-4 py-2 rounded-lg transition-all">
                 Entrar na lista
             </a>
         </div>
@@ -86,7 +94,8 @@
                         <span class="text-text-secondary">Integração com WhatsApp</span>
                     </div>
                 </div>
-                <a href="#waitlist" class="inline-block bg-accent hover:bg-accent-light text-primary-dark font-bold px-8 py-4 rounded-xl text-lg transition-all glow">
+                <a href="#waitlist"
+                    class="inline-block bg-accent hover:bg-accent-light text-primary-dark font-bold px-8 py-4 rounded-xl text-lg transition-all glow">
                     Quero participar
                 </a>
             </div>
@@ -130,7 +139,8 @@
                 Mais que organização, é <span class="text-accent">resenha</span>
             </h2>
             <p class="text-text-secondary text-center mb-12 max-w-2xl mx-auto">
-                O Partidinha vai além do administrativo. É onde você acompanha os amigos, destaca jogadas e alimenta a rivalidade saudável.
+                O Partidinha vai além do administrativo. É onde você acompanha os amigos, destaca jogadas e alimenta a
+                rivalidade saudável.
             </p>
             <div class="grid md:grid-cols-3 gap-8">
                 <div class="bg-primary rounded-xl p-6 card-hover transition-all duration-300">
@@ -139,7 +149,8 @@
                     </div>
                     <h3 class="text-xl font-semibold mb-2">Estatísticas completas</h3>
                     <p class="text-text-secondary">
-                        Gols, assistências, vitórias, derrotas. Acompanhe seu desempenho e dos seus amigos em tempo real.
+                        Gols, assistências, vitórias, derrotas. Acompanhe seu desempenho e dos seus amigos em tempo
+                        real.
                     </p>
                 </div>
                 <div class="bg-primary rounded-xl p-6 card-hover transition-all duration-300">
@@ -202,7 +213,8 @@
             </p>
             <div class="grid md:grid-cols-4 gap-8">
                 <div class="text-center">
-                    <div class="w-16 h-16 bg-accent rounded-full flex items-center justify-center mx-auto mb-4 text-primary-dark font-bold text-2xl">
+                    <div
+                        class="w-16 h-16 bg-accent rounded-full flex items-center justify-center mx-auto mb-4 text-primary-dark font-bold text-2xl">
                         1
                     </div>
                     <h3 class="font-semibold mb-2">Crie seu grupo</h3>
@@ -211,7 +223,8 @@
                     </p>
                 </div>
                 <div class="text-center">
-                    <div class="w-16 h-16 bg-accent rounded-full flex items-center justify-center mx-auto mb-4 text-primary-dark font-bold text-2xl">
+                    <div
+                        class="w-16 h-16 bg-accent rounded-full flex items-center justify-center mx-auto mb-4 text-primary-dark font-bold text-2xl">
                         2
                     </div>
                     <h3 class="font-semibold mb-2">Conecte o WhatsApp</h3>
@@ -220,7 +233,8 @@
                     </p>
                 </div>
                 <div class="text-center">
-                    <div class="w-16 h-16 bg-accent rounded-full flex items-center justify-center mx-auto mb-4 text-primary-dark font-bold text-2xl">
+                    <div
+                        class="w-16 h-16 bg-accent rounded-full flex items-center justify-center mx-auto mb-4 text-primary-dark font-bold text-2xl">
                         3
                     </div>
                     <h3 class="font-semibold mb-2">Registre as partidas</h3>
@@ -229,7 +243,8 @@
                     </p>
                 </div>
                 <div class="text-center">
-                    <div class="w-16 h-16 bg-accent rounded-full flex items-center justify-center mx-auto mb-4 text-primary-dark font-bold text-2xl">
+                    <div
+                        class="w-16 h-16 bg-accent rounded-full flex items-center justify-center mx-auto mb-4 text-primary-dark font-bold text-2xl">
                         4
                     </div>
                     <h3 class="font-semibold mb-2">Compartilhe a resenha</h3>
@@ -282,33 +297,18 @@
                 Entre na <span class="gradient-text">lista de espera</span>
             </h2>
             <p class="text-text-secondary mb-8">
-                Seja um dos primeiros a usar o Partidinha e ajude a construir a rede social dos atletas de final de semana.
+                Seja um dos primeiros a usar o Partidinha e ajude a construir a rede social dos atletas de final de
+                semana.
             </p>
             <form id="waitlist-form" action="https://formspree.io/f/xpwbjrvl" method="POST" class="space-y-4">
-                <input
-                    type="text"
-                    name="name"
-                    placeholder="Seu nome"
-                    required
-                    class="w-full bg-card border border-card-light rounded-xl px-4 py-3 focus:outline-none focus:border-accent transition-colors"
-                >
-                <input
-                    type="email"
-                    name="email"
-                    placeholder="Seu melhor e-mail"
-                    required
-                    class="w-full bg-card border border-card-light rounded-xl px-4 py-3 focus:outline-none focus:border-accent transition-colors"
-                >
-                <input
-                    type="tel"
-                    name="phone"
-                    placeholder="WhatsApp (opcional)"
-                    class="w-full bg-card border border-card-light rounded-xl px-4 py-3 focus:outline-none focus:border-accent transition-colors"
-                >
-                <select
-                    name="sport"
-                    class="w-full bg-card border border-card-light rounded-xl px-4 py-3 focus:outline-none focus:border-accent transition-colors text-text-secondary"
-                >
+                <input type="text" name="name" placeholder="Seu nome" required
+                    class="w-full bg-card border border-card-light rounded-xl px-4 py-3 focus:outline-none focus:border-accent transition-colors">
+                <input type="email" name="email" placeholder="Seu melhor e-mail" required
+                    class="w-full bg-card border border-card-light rounded-xl px-4 py-3 focus:outline-none focus:border-accent transition-colors">
+                <input type="tel" name="phone" placeholder="WhatsApp (opcional)"
+                    class="w-full bg-card border border-card-light rounded-xl px-4 py-3 focus:outline-none focus:border-accent transition-colors">
+                <select name="sport"
+                    class="w-full bg-card border border-card-light rounded-xl px-4 py-3 focus:outline-none focus:border-accent transition-colors text-text-secondary">
                     <option value="">Qual esporte você mais joga?</option>
                     <option value="futebol">Futebol</option>
                     <option value="beach-tennis">Beach Tennis</option>
@@ -317,10 +317,8 @@
                     <option value="volei">Vôlei</option>
                     <option value="outro">Outro</option>
                 </select>
-                <button
-                    type="submit"
-                    class="w-full bg-accent hover:bg-accent-light text-primary-dark font-bold px-8 py-4 rounded-xl text-lg transition-all glow"
-                >
+                <button type="submit"
+                    class="w-full bg-accent hover:bg-accent-light text-primary-dark font-bold px-8 py-4 rounded-xl text-lg transition-all glow">
                     Entrar na lista de espera
                 </button>
             </form>
@@ -390,5 +388,10 @@
             });
         });
     </script>
+
+    <!-- Cloudflare Web Analytics -->
+    <script defer src='https://static.cloudflareinsights.com/beacon.min.js'
+        data-cf-beacon='{"token": "cb1f8a672bbc4e94a548f2b57230268c"}'></script><!-- End Cloudflare Web Analytics -->
 </body>
+
 </html>
