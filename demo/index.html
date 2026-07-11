@@ -65,6 +65,21 @@
         .animate-fade-in {
             animation: fadeIn 0.3s ease-out forwards;
         }
+
+        /* WhatsApp-like scrollbar */
+        .chat-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        .chat-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .chat-scroll::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 3px;
+        }
+        .chat-scroll::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
     </style>
 </head>
 
@@ -191,11 +206,10 @@
                             <label class="relative flex flex-col p-4 bg-card-light hover:bg-card-light/80 border border-transparent rounded-xl cursor-pointer transition-all">
                                 <input type="radio" name="list-type" value="ficticios" checked class="sr-only peer">
                                 <div class="peer-checked:border-accent border-2 border-transparent absolute inset-0 rounded-xl pointer-events-none transition-all"></div>
+                                <div class="absolute top-4 right-4 w-4 h-4 rounded-full border border-text-secondary peer-checked:border-accent peer-checked:bg-accent transition-all z-10"></div>
+                                <div class="absolute top-[21px] right-[21px] w-1.5 h-1.5 rounded-full bg-transparent peer-checked:bg-primary-dark transition-all z-10"></div>
                                 <div class="flex items-center justify-between mb-2 z-10">
                                     <span class="font-semibold text-white text-sm">Fictícios</span>
-                                    <div class="w-4 h-4 rounded-full border border-text-secondary flex items-center justify-center peer-checked:border-accent peer-checked:bg-accent transition-all">
-                                        <div class="w-1.5 h-1.5 rounded-full bg-primary-dark"></div>
-                                    </div>
                                 </div>
                                 <span class="text-xs text-text-secondary leading-relaxed z-10">Carrega 15 jogadores fictícios para teste rápido.</span>
                             </label>
@@ -203,11 +217,10 @@
                             <label class="relative flex flex-col p-4 bg-card-light hover:bg-card-light/80 border border-transparent rounded-xl cursor-pointer transition-all">
                                 <input type="radio" name="list-type" value="manual" class="sr-only peer">
                                 <div class="peer-checked:border-accent border-2 border-transparent absolute inset-0 rounded-xl pointer-events-none transition-all"></div>
+                                <div class="absolute top-4 right-4 w-4 h-4 rounded-full border border-text-secondary peer-checked:border-accent peer-checked:bg-accent transition-all z-10"></div>
+                                <div class="absolute top-[21px] right-[21px] w-1.5 h-1.5 rounded-full bg-transparent peer-checked:bg-primary-dark transition-all z-10"></div>
                                 <div class="flex items-center justify-between mb-2 z-10">
                                     <span class="font-semibold text-white text-sm">Manual</span>
-                                    <div class="w-4 h-4 rounded-full border border-text-secondary flex items-center justify-center peer-checked:border-accent peer-checked:bg-accent transition-all">
-                                        <div class="w-1.5 h-1.5 rounded-full bg-primary-dark"></div>
-                                    </div>
                                 </div>
                                 <span class="text-xs text-text-secondary leading-relaxed z-10">Você poderá digitar o nome dos jogadores na simulação.</span>
                             </label>
@@ -225,20 +238,177 @@
         </div>
 
         <!-- Simulator Container (Hidden initially) -->
-        <div id="simulator-container" class="hidden w-full max-w-6xl mx-auto px-4 pt-24 pb-16">
-            <!-- Progress Stepper (placeholder for Task 3) -->
-            <div class="bg-card border border-card-light rounded-2xl p-6 md:p-8 flex flex-col items-center justify-center text-center shadow-xl">
-                <div class="w-16 h-16 bg-success/15 rounded-full flex items-center justify-center mb-4">
-                    <i data-lucide="check-circle-2" class="w-8 h-8 text-success"></i>
+        <div id="simulator-container" class="hidden w-full max-w-6xl mx-auto px-4 pt-24 pb-16 flex flex-col">
+            <!-- Progress Stepper -->
+            <div id="stepper-container" class="mb-8 w-full max-w-4xl mx-auto bg-card border border-card-light rounded-2xl p-4 md:p-6 shadow-xl relative z-10">
+                <div class="flex items-center justify-between relative px-2 md:px-6">
+                    <!-- Connecting Line Background -->
+                    <div class="absolute top-[18px] md:top-[22px] left-[32px] right-[32px] h-[3px] bg-card-light -translate-y-1/2 z-0"></div>
+                    <!-- Connecting Line Active -->
+                    <div id="stepper-line" class="absolute top-[18px] md:top-[22px] left-[32px] h-[3px] bg-accent -translate-y-1/2 z-0 transition-all duration-300" style="width: 0%;"></div>
+                    
+                    <!-- Step 1 -->
+                    <div class="flex flex-col items-center z-10 relative">
+                        <div id="step-circle-1" class="w-9 h-9 md:w-11 md:h-11 rounded-full bg-accent text-primary-dark flex items-center justify-center font-bold border-2 md:border-4 border-primary transition-all duration-300 shadow-[0_0_12px_rgba(0,212,255,0.4)]">
+                            <i data-lucide="message-square" class="w-4 h-4 md:w-5 md:h-5"></i>
+                        </div>
+                        <span class="text-[10px] md:text-xs mt-2 font-semibold text-accent" id="step-text-1">Lista</span>
+                    </div>
+                    
+                    <!-- Step 2 -->
+                    <div class="flex flex-col items-center z-10 relative">
+                        <div id="step-circle-2" class="w-9 h-9 md:w-11 md:h-11 rounded-full bg-card-light text-text-secondary flex items-center justify-center font-bold border-2 md:border-4 border-primary transition-all duration-300">
+                            <i data-lucide="shield-alert" class="w-4 h-4 md:w-5 md:h-5"></i>
+                        </div>
+                        <span class="text-[10px] md:text-xs mt-2 font-semibold text-text-secondary" id="step-text-2">Bloqueio</span>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="flex flex-col items-center z-10 relative">
+                        <div id="step-circle-3" class="w-9 h-9 md:w-11 md:h-11 rounded-full bg-card-light text-text-secondary flex items-center justify-center font-bold border-2 md:border-4 border-primary transition-all duration-300">
+                            <i data-lucide="dollar-sign" class="w-4 h-4 md:w-5 md:h-5"></i>
+                        </div>
+                        <span class="text-[10px] md:text-xs mt-2 font-semibold text-text-secondary" id="step-text-3">Cobrança</span>
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div class="flex flex-col items-center z-10 relative">
+                        <div id="step-circle-4" class="w-9 h-9 md:w-11 md:h-11 rounded-full bg-card-light text-text-secondary flex items-center justify-center font-bold border-2 md:border-4 border-primary transition-all duration-300">
+                            <i data-lucide="trophy" class="w-4 h-4 md:w-5 md:h-5"></i>
+                        </div>
+                        <span class="text-[10px] md:text-xs mt-2 font-semibold text-text-secondary" id="step-text-4">Ranking</span>
+                    </div>
+
+                    <!-- Step 5 -->
+                    <div class="flex flex-col items-center z-10 relative">
+                        <div id="step-circle-5" class="w-9 h-9 md:w-11 md:h-11 rounded-full bg-card-light text-text-secondary flex items-center justify-center font-bold border-2 md:border-4 border-primary transition-all duration-300">
+                            <i data-lucide="trending-up" class="w-4 h-4 md:w-5 md:h-5"></i>
+                        </div>
+                        <span class="text-[10px] md:text-xs mt-2 font-semibold text-text-secondary" id="step-text-5">Resultado</span>
+                    </div>
                 </div>
-                <h1 class="text-2xl md:text-3xl font-extrabold mb-3">Configurações Salvas!</h1>
-                <p class="text-lg text-white mb-2">Grupo: <span id="demo-group-name-display" class="gradient-text font-bold"></span></p>
-                <p class="text-sm text-text-secondary mb-6 max-w-lg" id="demo-group-details-display"></p>
-                
-                <div class="bg-primary-dark/60 rounded-xl p-4 border border-card-light inline-flex items-center gap-3 text-accent text-sm">
-                    <i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i>
-                    <span>Aguardando a implementação da Task 3 (Split-Screen & Simulador WhatsApp)...</span>
+            </div>
+
+            <!-- Mobile View Tab Buttons -->
+            <div class="flex md:hidden mb-6 bg-card-light p-1 rounded-xl w-full max-w-[280px] mx-auto border border-btn-secondary relative z-10 shrink-0">
+                <button id="tab-whatsapp" class="flex-1 py-2 text-xs font-semibold rounded-lg bg-accent text-primary-dark transition-all flex items-center justify-center gap-1.5">
+                    <i data-lucide="message-square" class="w-3.5 h-3.5"></i> WhatsApp
+                </button>
+                <button id="tab-app" class="flex-1 py-2 text-xs font-semibold rounded-lg text-text-secondary hover:text-white transition-all flex items-center justify-center gap-1.5">
+                    <i data-lucide="smartphone" class="w-3.5 h-3.5"></i> Aplicativo
+                </button>
+            </div>
+
+            <!-- Main Split-Screen Container -->
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-start w-full max-w-5xl mx-auto">
+                <!-- Left Column: WhatsApp Simulator -->
+                <div id="whatsapp-column" class="col-span-1 md:col-span-7 flex flex-col bg-card border border-card-light rounded-2xl shadow-2xl overflow-hidden h-[540px] relative">
+                    <!-- WhatsApp Header -->
+                    <div class="bg-[#202c33] px-4 py-3 flex items-center justify-between border-b border-[#2a3942] shrink-0 font-sans">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-accent/15 flex items-center justify-center border border-accent/20 text-accent">
+                                <i data-lucide="users" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-white text-sm" id="whatsapp-group-name">Grupo Pelada</h3>
+                                <p class="text-xs text-text-secondary">online</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4 text-text-secondary">
+                            <button class="hover:text-white transition-colors"><i data-lucide="search" class="w-5 h-5"></i></button>
+                            <button class="hover:text-white transition-colors"><i data-lucide="more-vertical" class="w-5 h-5"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- WhatsApp Chat Area -->
+                    <div id="whatsapp-chat-body" class="flex-grow overflow-y-auto p-4 space-y-3 bg-[#0b141a] relative flex flex-col chat-scroll">
+                        <!-- Initial system message will be added here -->
+                    </div>
+
+                    <!-- WhatsApp Input Bar -->
+                    <div class="bg-[#202c33] px-4 py-3 flex items-center gap-3 border-t border-[#2a3942] relative shrink-0">
+                        <!-- Helper Tooltip -->
+                        <div id="whatsapp-tooltip" class="absolute left-4 right-4 bottom-full mb-3 bg-gradient-to-r from-accent to-accent-light text-primary-dark font-bold text-xs md:text-sm py-3 px-4 rounded-xl shadow-xl flex items-center justify-between border border-accent/20 transition-all duration-300">
+                            <span class="flex items-center gap-2">
+                                <i data-lucide="info" class="w-4 h-4"></i>
+                                Envie <strong class="underline">/lista</strong> no WhatsApp para ver a lista de presença.
+                            </span>
+                            <button id="close-tooltip" class="hover:opacity-75 transition-opacity">
+                                <i data-lucide="x" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+
+                        <button class="text-text-secondary hover:text-white transition-colors">
+                            <i data-lucide="plus" class="w-6 h-6"></i>
+                        </button>
+                        
+                        <div class="flex-grow relative flex items-center">
+                            <input type="text" id="whatsapp-input-field" placeholder="Escreva uma mensagem..." disabled
+                                class="w-full bg-[#2a3942] border-transparent rounded-lg pl-4 pr-20 py-2.5 text-sm text-white focus:outline-none placeholder-text-secondary/50 cursor-not-allowed">
+                            
+                            <div class="absolute right-2 flex items-center">
+                                <button id="btn-send-lista" class="bg-accent hover:bg-accent-light text-primary-dark font-extrabold px-3 py-1.5 rounded-lg text-xs transition-all flex items-center gap-1 shadow-md hover:scale-[1.03] active:scale-[0.97]">
+                                    <i data-lucide="send" class="w-3 h-3"></i>
+                                    /lista
+                                </button>
+                            </div>
+                        </div>
+
+                        <button class="text-text-secondary hover:text-white transition-colors">
+                            <i data-lucide="mic" class="w-6 h-6"></i>
+                        </button>
+                    </div>
                 </div>
+
+                <!-- Right Column: Smartphone Mockup -->
+                <div id="app-column" class="col-span-1 md:col-span-5 hidden md:flex justify-center">
+                    <div class="relative border-[8px] border-card-light rounded-[36px] h-[540px] w-full max-w-[280px] shadow-2xl overflow-hidden bg-primary-dark flex flex-col font-sans">
+                        <!-- Camera Notch -->
+                        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-5 bg-card-light rounded-b-xl z-20 flex items-center justify-center">
+                            <div class="w-2.5 h-2.5 rounded-full bg-black mr-2"></div>
+                            <div class="w-10 h-0.5 bg-black/40 rounded-full"></div>
+                        </div>
+
+                        <!-- Status Bar -->
+                        <div class="h-6 bg-primary-dark px-4 pt-1 flex items-center justify-between text-[9px] text-text-secondary select-none font-semibold z-10 shrink-0">
+                            <span id="phone-clock">12:00</span>
+                            <div class="flex items-center gap-1">
+                                <i data-lucide="wifi" class="w-2.5 h-2.5"></i>
+                                <i data-lucide="signal" class="w-2.5 h-2.5"></i>
+                                <i data-lucide="battery" class="w-3 h-3"></i>
+                            </div>
+                        </div>
+
+                        <!-- App Screen Content Container -->
+                        <div id="app-screen-content" class="flex-grow flex flex-col p-3 relative overflow-hidden bg-primary">
+                            <!-- Header -->
+                            <div class="flex items-center justify-between mb-3 border-b border-card-light pb-2 shrink-0">
+                                <div class="flex items-center gap-2">
+                                    <img src="../images/logo.jpeg" alt="Partidinha" class="w-5 h-5 rounded-md">
+                                    <span class="font-bold text-xs gradient-text">Partidinha App</span>
+                                </div>
+                                <span class="text-[9px] bg-accent/15 text-accent px-1.5 py-0.5 rounded-full font-mono font-bold">PRO</span>
+                            </div>
+
+                            <!-- Screen View Placeholder -->
+                            <div id="app-screen-placeholder" class="flex-grow flex flex-col items-center justify-center text-center p-3">
+                                <div class="w-10 h-10 rounded-full bg-card-light flex items-center justify-center text-text-secondary mb-2 animate-pulse">
+                                    <i data-lucide="smartphone" class="w-5 h-5"></i>
+                                </div>
+                                <h4 class="font-bold text-xs text-white mb-1">Aguardando Sincronização</h4>
+                                <p class="text-[10px] text-text-secondary leading-normal">Envie <code class="bg-[#1f2937] px-1 py-0.5 rounded text-accent font-mono">/lista</code> no WhatsApp para ver os dados sincronizarem em tempo real aqui.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stepper Navigation Controls -->
+            <div class="mt-8 flex justify-center items-center relative z-10">
+                <button id="btn-next-step" class="hidden bg-gradient-to-r from-success to-[#00e676] hover:brightness-110 text-primary-dark font-extrabold px-8 py-3.5 rounded-xl text-md shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center gap-2">
+                    <span>Avançar para o Passo 2</span>
+                    <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                </button>
             </div>
         </div>
     </main>
@@ -271,7 +441,419 @@
             players: []
         };
 
+        // Utility: get next date for a day name
+        function getNextGameDate(targetDayName) {
+            const daysOfWeek = {
+                'Segunda': 1, 'Terça': 2, 'Quarta': 3, 'Quinta': 4,
+                'Sexta': 5, 'Sábado': 6, 'Domingo': 0
+            };
+            const targetDay = daysOfWeek[targetDayName];
+            if (targetDay === undefined) return '16/07';
+            
+            const today = new Date();
+            const resultDate = new Date(today);
+            
+            let daysToAdd = (targetDay - today.getDay() + 7) % 7;
+            if (daysToAdd === 0) daysToAdd = 7;
+            
+            resultDate.setDate(today.getDate() + daysToAdd);
+            
+            const dd = String(resultDate.getDate()).padStart(2, '0');
+            const mm = String(resultDate.getMonth() + 1).padStart(2, '0');
+            
+            return `${dd}/${mm}`;
+        }
+
+        // WhatsApp Chat helpers
+        function appendSystemMessage(text) {
+            const chatBody = document.getElementById('whatsapp-chat-body');
+            if (!chatBody) return;
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'self-center bg-[#182229] text-[10px] md:text-[11px] text-accent/80 px-3 py-1.5 rounded-lg shadow-sm border border-accent/10 max-w-[90%] text-center select-none my-2 font-mono';
+            msgDiv.textContent = text;
+            chatBody.appendChild(msgDiv);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        function sendUserMessage(text) {
+            const chatBody = document.getElementById('whatsapp-chat-body');
+            if (!chatBody) return;
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'self-end bg-[#005c4b] text-white text-xs md:text-sm px-3.5 py-2 rounded-xl rounded-tr-none max-w-[75%] shadow-md relative my-1';
+            
+            const now = new Date();
+            const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+            
+            msgDiv.innerHTML = `
+                <div class="pr-6 break-words font-sans">${text}</div>
+                <span class="absolute bottom-1 right-2 text-[9px] text-white/50 select-none">${timeStr}</span>
+            `;
+            
+            chatBody.appendChild(msgDiv);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        function showTypingIndicator() {
+            const chatBody = document.getElementById('whatsapp-chat-body');
+            if (!chatBody) return;
+            const msgDiv = document.createElement('div');
+            msgDiv.id = 'whatsapp-typing-indicator';
+            msgDiv.className = 'self-start bg-[#202c33] text-white px-4 py-3 rounded-xl rounded-tl-none max-w-[70%] shadow-md flex items-center gap-1 my-1 shrink-0';
+            msgDiv.innerHTML = `
+                <span class="w-1.5 h-1.5 bg-text-secondary rounded-full animate-bounce" style="animation-delay: 0ms;"></span>
+                <span class="w-1.5 h-1.5 bg-text-secondary rounded-full animate-bounce" style="animation-delay: 150ms;"></span>
+                <span class="w-1.5 h-1.5 bg-text-secondary rounded-full animate-bounce" style="animation-delay: 300ms;"></span>
+            `;
+            chatBody.appendChild(msgDiv);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        function removeTypingIndicator() {
+            const indicator = document.getElementById('whatsapp-typing-indicator');
+            if (indicator) {
+                indicator.remove();
+            }
+        }
+
+        function appendBotMessage(text) {
+            const chatBody = document.getElementById('whatsapp-chat-body');
+            if (!chatBody) return;
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'self-start bg-[#202c33] text-white text-xs md:text-sm px-3.5 py-2 rounded-xl rounded-tl-none max-w-[85%] shadow-md relative my-1 font-mono whitespace-pre-wrap leading-relaxed';
+            
+            const now = new Date();
+            const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+            
+            msgDiv.innerHTML = `
+                <div class="pr-6 break-words">${text}</div>
+                <span class="absolute bottom-1 right-2 text-[9px] text-text-secondary select-none">${timeStr}</span>
+            `;
+            
+            chatBody.appendChild(msgDiv);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        // Mini-modal for manual player input inside WhatsApp chat
+        function showManualNamesModal() {
+            const chatBody = document.getElementById('whatsapp-chat-body');
+            if (!chatBody) return;
+            
+            const overlay = document.createElement('div');
+            overlay.id = 'manual-names-overlay';
+            overlay.className = 'absolute inset-0 bg-primary-dark/85 backdrop-blur-sm flex items-center justify-center p-4 z-20 animate-fade-in font-sans';
+            
+            overlay.innerHTML = `
+                <div class="bg-card border border-card-light rounded-2xl p-5 w-full max-w-[260px] shadow-2xl space-y-4">
+                    <div class="text-center">
+                        <div class="w-10 h-10 bg-accent/15 rounded-xl flex items-center justify-center mx-auto mb-2 text-accent">
+                            <i data-lucide="user-plus" class="w-5 h-5"></i>
+                        </div>
+                        <h4 class="font-bold text-xs text-white">Adicionar Jogadores</h4>
+                        <p class="text-[10px] text-text-secondary">Digite o nome de 3 jogadores para a pelada:</p>
+                    </div>
+                    
+                    <div class="space-y-2">
+                        <input type="text" id="manual-p1" placeholder="Jogador 1" required
+                            class="w-full bg-card-light border border-btn-secondary rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-accent">
+                        <input type="text" id="manual-p2" placeholder="Jogador 2" required
+                            class="w-full bg-card-light border border-btn-secondary rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-accent">
+                        <input type="text" id="manual-p3" placeholder="Jogador 3" required
+                            class="w-full bg-card-light border border-btn-secondary rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-accent">
+                    </div>
+                    
+                    <button id="btn-submit-manual-names" class="w-full bg-accent hover:bg-accent-light text-primary-dark font-extrabold py-2 rounded-lg text-xs transition-all shadow-md">
+                        Confirmar Lista
+                    </button>
+                </div>
+            `;
+            
+            chatBody.appendChild(overlay);
+            
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+            
+            document.getElementById('btn-submit-manual-names').addEventListener('click', () => {
+                const p1 = document.getElementById('manual-p1').value.trim();
+                const p2 = document.getElementById('manual-p2').value.trim();
+                const p3 = document.getElementById('manual-p3').value.trim();
+                
+                if (!p1 || !p2 || !p3) {
+                    alert('Por favor, preencha os nomes dos 3 jogadores.');
+                    return;
+                }
+                
+                window.gameState.players = [p1, p2, p3];
+                overlay.remove();
+                
+                // Bot reacts typing after players are entered
+                showTypingIndicator();
+                setTimeout(() => {
+                    removeTypingIndicator();
+                    
+                    const gameDate = getNextGameDate(window.gameState.gameDay);
+                    const listMsg = `⚽️ ${window.gameState.groupName} (${window.gameState.gameDay}, ${gameDate} 19:00) ⚽️
+
+📌 LISTA DO GRUPO
+
+1. ${p1}
+2. ${p2}
+3. ${p3}
+
+🎽 Suplentes
+• entram automaticamente na lista caso alguém desista
+
+(Nenhum suplente)`;
+                    
+                    appendBotMessage(listMsg);
+                    syncMobileAppScreen();
+                    
+                    const nextBtn = document.getElementById('btn-next-step');
+                    if (nextBtn) {
+                        nextBtn.classList.remove('hidden');
+                        nextBtn.textContent = 'Avançar para o Passo 2';
+                    }
+                }, 1000);
+            });
+        }
+
+        // Sync player data to simulated smartphone screen
+        function syncMobileAppScreen() {
+            const appScreenContent = document.getElementById('app-screen-content');
+            if (!appScreenContent) return;
+            
+            const players = window.gameState.players;
+            let playerItemsHTML = '';
+            
+            players.forEach((playerName) => {
+                playerItemsHTML += `
+                    <div class="flex items-center justify-between bg-card-light/50 border border-card-light rounded-xl p-2 md:p-2.5 hover:border-accent/30 transition-all">
+                        <div class="flex items-center gap-2">
+                            <div class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-accent/10 border border-accent/20 flex items-center justify-center text-accent text-xs font-bold font-mono">
+                                ${playerName.charAt(0).toUpperCase()}
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-[11px] md:text-xs text-white leading-tight">${playerName}</h4>
+                                <p class="text-[9px] md:text-[10px] text-text-secondary">Mensalista</p>
+                            </div>
+                        </div>
+                        <span class="text-[9px] md:text-[10px] font-semibold bg-success/10 text-success border border-success/20 px-2 py-0.5 rounded-full">Confirmado</span>
+                    </div>
+                `;
+            });
+            
+            // Add Thiago (debtor / delinquent)
+            playerItemsHTML += `
+                <div class="flex items-center justify-between bg-card-light/50 border border-red-500/20 rounded-xl p-2 md:p-2.5 hover:border-red-500/45 transition-all">
+                    <div class="flex items-center gap-2">
+                        <div class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-500 text-xs font-bold font-mono">
+                            T
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-[11px] md:text-xs text-white leading-tight">Thiago</h4>
+                            <p class="text-[9px] md:text-[10px] text-text-secondary">Avulso</p>
+                        </div>
+                    </div>
+                    <span class="text-[9px] md:text-[10px] font-semibold bg-red-500/10 text-red-500 border border-red-500/20 px-1.5 py-0.5 rounded-full flex items-center gap-0.5 font-sans">
+                        Inadimplente 🔴
+                    </span>
+                </div>
+            `;
+            
+            const totalCount = players.length + 1;
+            const confirmedCount = players.length;
+            
+            appScreenContent.innerHTML = `
+                <!-- Header -->
+                <div class="flex items-center justify-between mb-3 border-b border-card-light pb-2 shrink-0">
+                    <div class="flex items-center gap-2">
+                        <img src="../images/logo.jpeg" alt="Partidinha" class="w-5 h-5 rounded-md">
+                        <span class="font-bold text-xs gradient-text">Partidinha App</span>
+                    </div>
+                    <span class="text-[9px] bg-accent/15 text-accent px-1.5 py-0.5 rounded-full font-mono font-bold">PRO</span>
+                </div>
+
+                <!-- App Tab Content: Jogadores -->
+                <div id="app-screen-jogadores" class="flex-grow flex flex-col overflow-hidden">
+                    <!-- Tab navigation inside app -->
+                    <div class="flex border-b border-card-light mb-3 text-[10px] md:text-xs shrink-0">
+                        <button class="flex-1 pb-2 border-b-2 border-accent text-white font-semibold flex items-center justify-center gap-1">
+                            <i data-lucide="users" class="w-3 h-3 md:w-3.5 md:h-3.5"></i> Jogadores
+                        </button>
+                        <button class="flex-1 pb-2 border-b-2 border-transparent text-text-secondary font-semibold flex items-center justify-center gap-1 hover:text-white transition-all">
+                            <i data-lucide="dollar-sign" class="w-3 h-3 md:w-3.5 md:h-3.5"></i> Financeiro
+                        </button>
+                    </div>
+                    
+                    <!-- Player count summary -->
+                    <div class="flex items-center justify-between mb-3 text-[9px] md:text-[10px] text-text-secondary bg-card-light/40 px-2.5 py-1.5 rounded-lg shrink-0">
+                        <span>Total: ${totalCount} jogadores</span>
+                        <span class="text-success font-semibold flex items-center gap-0.5"><span class="w-1 h-1 rounded-full bg-success"></span> ${confirmedCount} confirmados</span>
+                    </div>
+
+                    <!-- Scrollable Player List -->
+                    <div class="flex-grow overflow-y-auto space-y-2 max-h-[300px] md:max-h-[340px] pr-1 chat-scroll" id="app-players-list-container">
+                        ${playerItemsHTML}
+                    </div>
+                </div>
+            `;
+            
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        }
+
+        // Initialize Step 1
+        function initializeStep1() {
+            const chatBody = document.getElementById('whatsapp-chat-body');
+            if (chatBody) chatBody.innerHTML = '';
+            
+            appendSystemMessage('🤖 Partidinha Bot foi adicionado ao grupo. Envie comandos para interagir.');
+            
+            // Show Tooltip
+            const tooltip = document.getElementById('whatsapp-tooltip');
+            if (tooltip) {
+                tooltip.classList.remove('opacity-0', 'pointer-events-none', 'scale-95');
+            }
+            
+            // Enable send list button
+            const sendBtn = document.getElementById('btn-send-lista');
+            if (sendBtn) {
+                sendBtn.disabled = false;
+                sendBtn.className = 'bg-accent hover:bg-accent-light text-primary-dark font-extrabold px-3 py-1.5 rounded-lg text-xs transition-all flex items-center gap-1 shadow-md hover:scale-[1.03] active:scale-[0.97]';
+            }
+            
+            // Reset state players
+            window.gameState.players = [];
+            
+            // Reset App Mockup to placeholder
+            const appScreenContent = document.getElementById('app-screen-content');
+            if (appScreenContent) {
+                appScreenContent.innerHTML = `
+                    <!-- Header -->
+                    <div class="flex items-center justify-between mb-3 border-b border-card-light pb-2 shrink-0">
+                        <div class="flex items-center gap-2">
+                            <img src="../images/logo.jpeg" alt="Partidinha" class="w-5 h-5 rounded-md">
+                            <span class="font-bold text-xs gradient-text">Partidinha App</span>
+                        </div>
+                        <span class="text-[9px] bg-accent/15 text-accent px-1.5 py-0.5 rounded-full font-mono font-bold">PRO</span>
+                    </div>
+
+                    <!-- Screen View Placeholder -->
+                    <div id="app-screen-placeholder" class="flex-grow flex flex-col items-center justify-center text-center p-3">
+                        <div class="w-10 h-10 rounded-full bg-card-light flex items-center justify-center text-text-secondary mb-2 animate-pulse">
+                            <i data-lucide="smartphone" class="w-5 h-5"></i>
+                        </div>
+                        <h4 class="font-bold text-xs text-white mb-1">Aguardando Sincronização</h4>
+                        <p class="text-[10px] text-text-secondary leading-normal">Envie <code class="bg-[#1f2937] px-1 py-0.5 rounded text-accent font-mono">/lista</code> no WhatsApp para ver os dados sincronizarem em tempo real aqui.</p>
+                    </div>
+                `;
+            }
+            
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        }
+
+        // Initialize Step 2
+        function initializeStep2() {
+            appendSystemMessage('⚠️ Passo 2: Bloqueio Automatizado iniciado.');
+            appendBotMessage('Thiago (inadimplente) tentará se inscrever na lista na próxima etapa.');
+            
+            // For now, allow progression to end simulation demo
+            const nextBtn = document.getElementById('btn-next-step');
+            if (nextBtn) {
+                nextBtn.textContent = 'Simulação Concluída (Finalizar)';
+                nextBtn.classList.remove('hidden');
+            }
+        }
+
+        // General Step Management
+        function goToStep(step) {
+            window.gameState.step = step;
+            
+            // Stepper Line width
+            const stepperLine = document.getElementById('stepper-line');
+            if (stepperLine) {
+                stepperLine.style.width = `${(step - 1) * 25}%`;
+            }
+            
+            // Update Stepper Circles
+            for (let i = 1; i <= 5; i++) {
+                const circle = document.getElementById(`step-circle-${i}`);
+                const text = document.getElementById(`step-text-${i}`);
+                if (circle && text) {
+                    if (i < step) {
+                        // Completed
+                        circle.className = 'w-9 h-9 md:w-11 md:h-11 rounded-full bg-success text-primary-dark flex items-center justify-center font-bold border-2 md:border-4 border-primary transition-all duration-300 shadow-lg';
+                        circle.innerHTML = '<i data-lucide="check" class="w-4 h-4 md:w-5 md:h-5"></i>';
+                        text.className = 'text-[10px] md:text-xs mt-2 font-semibold text-success';
+                    } else if (i === step) {
+                        // Active
+                        circle.className = 'w-9 h-9 md:w-11 md:h-11 rounded-full bg-accent text-primary-dark flex items-center justify-center font-bold border-2 md:border-4 border-primary transition-all duration-300 shadow-[0_0_12px_rgba(0,212,255,0.5)]';
+                        const icons = ['message-square', 'shield-alert', 'dollar-sign', 'trophy', 'trending-up'];
+                        circle.innerHTML = `<i data-lucide="${icons[i-1]}" class="w-4 h-4 md:w-5 md:h-5"></i>`;
+                        text.className = 'text-[10px] md:text-xs mt-2 font-semibold text-accent';
+                    } else {
+                        // Inactive / pending
+                        circle.className = 'w-9 h-9 md:w-11 md:h-11 rounded-full bg-card-light text-text-secondary flex items-center justify-center font-bold border-2 md:border-4 border-primary transition-all duration-300';
+                        const icons = ['message-square', 'shield-alert', 'dollar-sign', 'trophy', 'trending-up'];
+                        circle.innerHTML = `<i data-lucide="${icons[i-1]}" class="w-4 h-4 md:w-5 md:h-5"></i>`;
+                        text.className = 'text-[10px] md:text-xs mt-2 font-semibold text-text-secondary';
+                    }
+                }
+            }
+            
+            // Hide next button initially for the new step
+            const nextBtn = document.getElementById('btn-next-step');
+            if (nextBtn) {
+                nextBtn.classList.add('hidden');
+            }
+            
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+            
+            // Run initializer
+            if (step === 1) {
+                initializeStep1();
+            } else if (step === 2) {
+                initializeStep2();
+            }
+        }
+
+        // Mobile tabs responsive display helper
+        function switchMobileTab(tab) {
+            const wsCol = document.getElementById('whatsapp-column');
+            const appCol = document.getElementById('app-column');
+            const btnWs = document.getElementById('tab-whatsapp');
+            const btnApp = document.getElementById('tab-app');
+
+            if (tab === 'whatsapp') {
+                wsCol.classList.remove('hidden');
+                appCol.classList.add('hidden');
+                btnWs.className = 'flex-1 py-2 text-xs font-semibold rounded-lg bg-accent text-primary-dark transition-all flex items-center justify-center gap-1.5';
+                btnApp.className = 'flex-1 py-2 text-xs font-semibold rounded-lg text-text-secondary hover:text-white transition-all flex items-center justify-center gap-1.5';
+            } else {
+                appCol.classList.remove('hidden');
+                wsCol.classList.add('hidden');
+                btnApp.className = 'flex-1 py-2 text-xs font-semibold rounded-lg bg-accent text-primary-dark transition-all flex items-center justify-center gap-1.5';
+                btnWs.className = 'flex-1 py-2 text-xs font-semibold rounded-lg text-text-secondary hover:text-white transition-all flex items-center justify-center gap-1.5';
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
+            // Live clock in app
+            const updatePhoneClock = () => {
+                const clockEl = document.getElementById('phone-clock');
+                if (clockEl) {
+                    const now = new Date();
+                    clockEl.textContent = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+                }
+            };
+            setInterval(updatePhoneClock, 60000);
+            updatePhoneClock();
+
             // Initialize Lucide Icons
             if (typeof lucide !== 'undefined') {
                 lucide.createIcons();
@@ -280,13 +862,11 @@
             const form = document.getElementById('onboarding-form');
             const modal = document.getElementById('onboarding-modal');
             const simulator = document.getElementById('simulator-container');
-            const groupNameDisplay = document.getElementById('demo-group-name-display');
-            const detailsDisplay = document.getElementById('demo-group-details-display');
 
+            // Handle onboarding submission
             form.addEventListener('submit', (e) => {
                 e.preventDefault();
 
-                // Retrieve form values
                 const groupName = document.getElementById('group-name').value.trim();
                 const gameDay = document.getElementById('game-day').value;
                 const frequency = document.getElementById('frequency').value;
@@ -294,7 +874,6 @@
                 const feeMensal = parseFloat(document.getElementById('fee-mensal').value);
                 const listType = document.querySelector('input[name="list-type"]:checked').value;
 
-                // Validate form values
                 if (!groupName) {
                     alert('Por favor, digite o nome do grupo.');
                     return;
@@ -308,12 +887,11 @@
                     return;
                 }
 
-                // Determine frequency multiplier
                 let multiplier = 4;
                 if (frequency === 'quinzenal') multiplier = 2;
                 if (frequency === 'mensal') multiplier = 1;
 
-                // Update global game state
+                // Set state
                 window.gameState = {
                     groupName: groupName,
                     gameDay: gameDay,
@@ -326,29 +904,125 @@
                     players: []
                 };
 
-                // Output to console for validation / verification
-                console.log('Onboarding complete. Game State:', window.gameState);
-
-                // Update UI displays
-                if (groupNameDisplay) {
-                    groupNameDisplay.textContent = groupName;
-                }
-
-                if (detailsDisplay) {
-                    const daySuffix = (gameDay === 'Sábado' || gameDay === 'Domingo') ? '' : '-feira';
-                    const freqLabel = frequency === 'semanal' ? 'Semanal (4x / mês)' : frequency === 'quinzenal' ? 'Quinzenal (2x / mês)' : 'Mensal (1x / mês)';
-                    detailsDisplay.textContent = `${gameDay}${daySuffix} • Frequência: ${freqLabel} • Avulso: R$ ${feeAvulso.toFixed(2)} • Mensal: R$ ${feeMensal.toFixed(2)} • Tipo de Lista: ${listType === 'ficticios' ? 'Fictícios' : 'Manual'}`;
+                // Sync group name to header
+                const wsGroupName = document.getElementById('whatsapp-group-name');
+                if (wsGroupName) {
+                    wsGroupName.textContent = groupName;
                 }
 
                 // Hide onboarding modal and reveal simulator
                 modal.classList.add('hidden');
                 simulator.classList.remove('hidden');
 
-                // Re-initialize Lucide Icons if any new icons are rendered
-                if (typeof lucide !== 'undefined') {
-                    lucide.createIcons();
-                }
+                // Start step 1
+                goToStep(1);
             });
+
+            // Handle /lista button click
+            const btnSendLista = document.getElementById('btn-send-lista');
+            if (btnSendLista) {
+                btnSendLista.addEventListener('click', () => {
+                    // Hide tooltip
+                    const tooltip = document.getElementById('whatsapp-tooltip');
+                    if (tooltip) {
+                        tooltip.classList.add('opacity-0', 'pointer-events-none', 'scale-95');
+                    }
+
+                    // Disable button to prevent multi-clicking
+                    btnSendLista.disabled = true;
+                    btnSendLista.className = 'bg-card-light text-text-secondary font-extrabold px-3 py-1.5 rounded-lg text-xs transition-all flex items-center gap-1 shadow-inner cursor-not-allowed';
+
+                    // Send user command
+                    sendUserMessage('/lista');
+
+                    // Show bot typing response
+                    showTypingIndicator();
+
+                    setTimeout(() => {
+                        removeTypingIndicator();
+
+                        if (window.gameState.listType === 'ficticios') {
+                            const ficticiosList = ['João', 'Pedro', 'André', 'Zeca', 'Bruno', 'Carlos', 'Felipe', 'Gustavo', 'Lucas', 'Mateus', 'Rafael', 'Rodrigo', 'Daniel', 'Diego', 'Gabriel'];
+                            window.gameState.players = ficticiosList;
+
+                            const gameDate = getNextGameDate(window.gameState.gameDay);
+                            const listMsg = `⚽️ ${window.gameState.groupName} (${window.gameState.gameDay}, ${gameDate} 19:00) ⚽️
+
+📌 LISTA DO GRUPO
+
+1. João
+2. Pedro
+3. André
+4. Zeca
+5. Bruno
+6. Carlos
+7. Felipe
+8. Gustavo
+9. Lucas
+10. Mateus
+11. Rafael
+12. Rodrigo
+
+🎽 Suplentes
+• entram automaticamente na lista caso alguém desista
+
+13. Daniel
+14. Diego
+15. Gabriel`;
+
+                            appendBotMessage(listMsg);
+                            syncMobileAppScreen();
+
+                            // Show Next step button
+                            const nextBtn = document.getElementById('btn-next-step');
+                            if (nextBtn) {
+                                nextBtn.classList.remove('hidden');
+                                nextBtn.textContent = 'Avançar para o Passo 2';
+                            }
+                        } else {
+                            // Manual list flow - ask for player names inside chat overlay
+                            showManualNamesModal();
+                        }
+                    }, 1000);
+                });
+            }
+
+            // Handle tooltip close
+            const btnCloseTooltip = document.getElementById('close-tooltip');
+            if (btnCloseTooltip) {
+                btnCloseTooltip.addEventListener('click', () => {
+                    const tooltip = document.getElementById('whatsapp-tooltip');
+                    if (tooltip) {
+                        tooltip.classList.add('opacity-0', 'pointer-events-none', 'scale-95');
+                    }
+                });
+            }
+
+            // Mobile view tab toggling
+            const tabWs = document.getElementById('tab-whatsapp');
+            const tabApp = document.getElementById('tab-app');
+            if (tabWs) {
+                tabWs.addEventListener('click', () => switchMobileTab('whatsapp'));
+            }
+            if (tabApp) {
+                tabApp.addEventListener('click', () => switchMobileTab('app'));
+            }
+
+            // Handle progression button
+            const nextBtn = document.getElementById('btn-next-step');
+            if (nextBtn) {
+                nextBtn.addEventListener('click', () => {
+                    if (window.gameState.step === 1) {
+                        // Switch view on mobile to show app after list retrieval
+                        if (window.innerWidth < 768) {
+                            switchMobileTab('app');
+                        }
+                        goToStep(2);
+                    } else if (window.gameState.step === 2) {
+                        alert('Parabéns! Você concluiu a simulação do Passo 1 e do esqueleto do Passo 2. As próximas etapas serão ativadas nas próximas tasks.');
+                    }
+                });
+            }
         });
     </script>
 </body>
