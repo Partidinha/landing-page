@@ -622,7 +622,10 @@
                     const nextBtn = document.getElementById('btn-next-step');
                     if (nextBtn) {
                         nextBtn.classList.remove('hidden');
-                        nextBtn.textContent = 'Avançar para o Passo 2';
+                        nextBtn.innerHTML = `<span>Avançar para o Passo 2</span> <i data-lucide="arrow-right" class="w-5 h-5"></i>`;
+                        if (typeof lucide !== 'undefined') {
+                            lucide.createIcons();
+                        }
                     }
                 }, 1000);
             });
@@ -634,45 +637,127 @@
             if (!appScreenContent) return;
             
             const players = window.gameState.players;
-            let playerItemsHTML = '';
+            const appTab = window.gameState.appTab || 'jogadores';
+            const isJogadores = appTab === 'jogadores';
             
-            players.forEach((playerName) => {
-                playerItemsHTML += `
-                    <div class="flex items-center justify-between bg-card-light/50 border border-card-light rounded-xl p-2 md:p-2.5 hover:border-accent/30 transition-all">
-                        <div class="flex items-center gap-2">
-                            <div class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-accent/10 border border-accent/20 flex items-center justify-center text-accent text-xs font-bold font-mono">
-                                ${playerName.charAt(0).toUpperCase()}
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-[11px] md:text-xs text-white leading-tight">${playerName}</h4>
-                                <p class="text-[9px] md:text-[10px] text-text-secondary">Mensalista</p>
-                            </div>
-                        </div>
-                        <span class="text-[9px] md:text-[10px] font-semibold bg-success/10 text-success border border-success/20 px-2 py-0.5 rounded-full">Confirmado</span>
-                    </div>
-                `;
-            });
-            
-            // Add Thiago (debtor / delinquent)
-            playerItemsHTML += `
-                <div class="flex items-center justify-between bg-card-light/50 border border-red-500/20 rounded-xl p-2 md:p-2.5 hover:border-red-500/45 transition-all">
-                    <div class="flex items-center gap-2">
-                        <div class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-500 text-xs font-bold font-mono">
-                            T
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-[11px] md:text-xs text-white leading-tight">Thiago</h4>
-                            <p class="text-[9px] md:text-[10px] text-text-secondary">Avulso</p>
-                        </div>
-                    </div>
-                    <span class="text-[9px] md:text-[10px] font-semibold bg-red-500/10 text-red-500 border border-red-500/20 px-1.5 py-0.5 rounded-full flex items-center gap-0.5 font-sans">
-                        Inadimplente 🔴
-                    </span>
+            // Tab navigation inside app HTML
+            const tabButtonsHTML = `
+                <div class="flex border-b border-card-light mb-3 text-[10px] md:text-xs shrink-0">
+                    <button onclick="switchAppTab('jogadores')" class="flex-1 pb-2 border-b-2 ${isJogadores ? 'border-accent text-white' : 'border-transparent text-text-secondary'} font-semibold flex items-center justify-center gap-1 hover:text-white transition-all">
+                        <i data-lucide="users" class="w-3 h-3 md:w-3.5 md:h-3.5"></i> Jogadores
+                    </button>
+                    <button onclick="switchAppTab('financeiro')" class="flex-1 pb-2 border-b-2 ${!isJogadores ? 'border-accent text-white' : 'border-transparent text-text-secondary'} font-semibold flex items-center justify-center gap-1 hover:text-white transition-all">
+                        <i data-lucide="dollar-sign" class="w-3 h-3 md:w-3.5 md:h-3.5"></i> Financeiro
+                    </button>
                 </div>
             `;
             
-            const totalCount = players.length + 1;
-            const confirmedCount = players.length;
+            let tabContentHTML = '';
+            
+            if (isJogadores) {
+                let playerItemsHTML = '';
+                players.forEach((playerName) => {
+                    playerItemsHTML += `
+                        <div class="flex items-center justify-between bg-card-light/50 border border-card-light rounded-xl p-2 md:p-2.5 hover:border-accent/30 transition-all">
+                            <div class="flex items-center gap-2">
+                                <div class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-accent/10 border border-accent/20 flex items-center justify-center text-accent text-xs font-bold font-mono">
+                                    ${playerName.charAt(0).toUpperCase()}
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-[11px] md:text-xs text-white leading-tight">${playerName}</h4>
+                                    <p class="text-[9px] md:text-[10px] text-text-secondary">Mensalista</p>
+                                </div>
+                            </div>
+                            <span class="text-[9px] md:text-[10px] font-semibold bg-success/10 text-success border border-success/20 px-2 py-0.5 rounded-full">Confirmado</span>
+                        </div>
+                    `;
+                });
+                
+                // Add Thiago (debtor / delinquent)
+                playerItemsHTML += `
+                    <div class="flex items-center justify-between bg-card-light/50 border border-red-500/20 rounded-xl p-2 md:p-2.5 hover:border-red-500/45 transition-all">
+                        <div class="flex items-center gap-2">
+                            <div class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-500 text-xs font-bold font-mono">
+                                T
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-[11px] md:text-xs text-white leading-tight font-sans">Thiago</h4>
+                                <p class="text-[9px] md:text-[10px] text-text-secondary">Avulso</p>
+                            </div>
+                        </div>
+                        <span class="text-[9px] md:text-[10px] font-semibold bg-red-500/10 text-red-500 border border-red-500/20 px-1.5 py-0.5 rounded-full flex items-center gap-0.5 font-sans">
+                            Inadimplente 🔴
+                        </span>
+                    </div>
+                `;
+                
+                const totalCount = players.length + 1;
+                const confirmedCount = players.length;
+                
+                tabContentHTML = `
+                    <!-- Player count summary -->
+                    <div class="flex items-center justify-between mb-3 text-[9px] md:text-[10px] text-text-secondary bg-card-light/40 px-2.5 py-1.5 rounded-lg shrink-0">
+                        <span>Total: ${totalCount} jogadores</span>
+                        <span class="text-success font-semibold flex items-center gap-0.5"><span class="w-1 h-1 rounded-full bg-success"></span> ${confirmedCount} confirmados</span>
+                    </div>
+
+                    <!-- Scrollable Player List -->
+                    <div class="flex-grow overflow-y-auto space-y-2 max-h-[300px] md:max-h-[340px] pr-1 chat-scroll" id="app-players-list-container">
+                        ${playerItemsHTML}
+                    </div>
+                `;
+            } else {
+                // Financeiro tab
+                const feeAvulsoVal = window.gameState.feeAvulso !== undefined ? window.gameState.feeAvulso : 25;
+                const isStep3 = window.gameState.step === 3;
+                tabContentHTML = `
+                    <!-- Pending payments header/summary -->
+                    <div class="flex items-center justify-between mb-3 text-[9px] md:text-[10px] text-text-secondary bg-card-light/40 px-2.5 py-1.5 rounded-lg shrink-0">
+                        <span>Pendências: 1 jogador</span>
+                        <span class="text-red-500 font-semibold flex items-center gap-0.5"><span class="w-1.5 h-1.5 rounded-full bg-red-500 font-bold animate-pulse"></span> R$ ${feeAvulsoVal.toFixed(2)} total</span>
+                    </div>
+                    
+                    <!-- Scrollable content -->
+                    <div class="flex-grow overflow-y-auto space-y-3 max-h-[300px] md:max-h-[340px] pr-1 chat-scroll">
+                        <!-- Avulsos Section -->
+                        <div>
+                            <div class="text-[10px] uppercase tracking-wider text-text-secondary font-bold mb-1.5 px-1">Avulsos</div>
+                            <div class="bg-card-light/50 border border-red-500/20 rounded-xl p-2.5 hover:border-red-500/40 transition-all flex flex-col gap-2">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-500 text-xs font-bold font-mono">
+                                            T
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-[11px] md:text-xs text-white leading-tight font-sans">Thiago</h4>
+                                            <p class="text-[9px] md:text-[10px] text-text-secondary">Pendente: 11/07</p>
+                                        </div>
+                                    </div>
+                                    <span class="text-xs font-mono font-bold text-red-500">R$ ${feeAvulsoVal.toFixed(2)}</span>
+                                </div>
+                                
+                                ${isStep3 ? `
+                                <button id="btn-cobrar-inadimplente" onclick="triggerCobrarInadimplente()" class="w-full bg-red-500 hover:bg-red-600 active:bg-red-700 text-white font-extrabold py-2 rounded-lg text-[10px] md:text-xs transition-all shadow-md flex items-center justify-center gap-1 hover:scale-[1.01] active:scale-[0.99]">
+                                    <i data-lucide="bell" class="w-3 md:w-3.5 h-3 md:h-3.5"></i>
+                                    Cobrar Inadimplente
+                                </button>
+                                ` : `
+                                <button disabled class="w-full bg-card-light text-text-secondary font-extrabold py-2 rounded-lg text-[10px] md:text-xs shadow-inner cursor-not-allowed flex items-center justify-center gap-1">
+                                    <i data-lucide="lock" class="w-3 md:w-3.5 h-3 md:h-3.5 animate-pulse"></i>
+                                    Bloqueado
+                                </button>
+                                `}
+                            </div>
+                        </div>
+
+                        <!-- Mensalistas Section -->
+                        <div>
+                            <div class="text-[10px] uppercase tracking-wider text-text-secondary font-bold mb-1.5 px-1">Mensalistas</div>
+                            <p class="text-[9px] text-text-secondary italic px-1">Nenhuma pendência ativa para mensalistas.</p>
+                        </div>
+                    </div>
+                `;
+            }
             
             appScreenContent.innerHTML = `
                 <!-- Header -->
@@ -684,28 +769,9 @@
                     <span class="text-[9px] bg-accent/15 text-accent px-1.5 py-0.5 rounded-full font-mono font-bold">PRO</span>
                 </div>
 
-                <!-- App Tab Content: Jogadores -->
-                <div id="app-screen-jogadores" class="flex-grow flex flex-col overflow-hidden">
-                    <!-- Tab navigation inside app -->
-                    <div class="flex border-b border-card-light mb-3 text-[10px] md:text-xs shrink-0">
-                        <button class="flex-1 pb-2 border-b-2 border-accent text-white font-semibold flex items-center justify-center gap-1">
-                            <i data-lucide="users" class="w-3 h-3 md:w-3.5 md:h-3.5"></i> Jogadores
-                        </button>
-                        <button class="flex-1 pb-2 border-b-2 border-transparent text-text-secondary font-semibold flex items-center justify-center gap-1 hover:text-white transition-all">
-                            <i data-lucide="dollar-sign" class="w-3 h-3 md:w-3.5 md:h-3.5"></i> Financeiro
-                        </button>
-                    </div>
-                    
-                    <!-- Player count summary -->
-                    <div class="flex items-center justify-between mb-3 text-[9px] md:text-[10px] text-text-secondary bg-card-light/40 px-2.5 py-1.5 rounded-lg shrink-0">
-                        <span>Total: ${totalCount} jogadores</span>
-                        <span class="text-success font-semibold flex items-center gap-0.5"><span class="w-1 h-1 rounded-full bg-success"></span> ${confirmedCount} confirmados</span>
-                    </div>
-
-                    <!-- Scrollable Player List -->
-                    <div class="flex-grow overflow-y-auto space-y-2 max-h-[300px] md:max-h-[340px] pr-1 chat-scroll" id="app-players-list-container">
-                        ${playerItemsHTML}
-                    </div>
+                <div class="flex-grow flex flex-col overflow-hidden">
+                    ${tabButtonsHTML}
+                    ${tabContentHTML}
                 </div>
             `;
             
@@ -751,6 +817,7 @@
 
         // Initialize Step 1
         function initializeStep1() {
+            window.gameState.appTab = 'jogadores';
             const chatBody = document.getElementById('whatsapp-chat-body');
             if (chatBody) chatBody.innerHTML = '';
             
@@ -810,6 +877,7 @@
             if (!window.gameState.players || window.gameState.players.length === 0) {
                 window.gameState.players = ['João', 'Pedro', 'André', 'Zeca', 'Bruno', 'Carlos', 'Felipe', 'Gustavo', 'Lucas', 'Mateus', 'Rafael', 'Rodrigo', 'Daniel', 'Diego', 'Gabriel'];
             }
+            window.gameState.appTab = 'jogadores';
             syncMobileAppScreen();
 
             // Set up input view for Step 2
@@ -831,6 +899,110 @@
             appendSystemMessage('⚠️ Passo 2: Bloqueio Automatizado iniciado.');
             appendBotMessage('Thiago (inadimplente) tentará se inscrever na lista.');
 
+            // Hide the next step button until the simulation is completed
+            const nextBtn = document.getElementById('btn-next-step');
+            if (nextBtn) {
+                nextBtn.classList.add('hidden');
+            }
+        }
+
+        // Tab switcher inside mobile app simulator
+        function switchAppTab(tab) {
+            if (window.gameState.step < 2) return; // Prevent switching tab before synchronizing list
+            window.gameState.appTab = tab;
+            syncMobileAppScreen();
+        }
+
+        // Trigger manual/automatic billing for Thiago
+        function triggerCobrarInadimplente() {
+            const btn = document.getElementById('btn-cobrar-inadimplente');
+            if (!btn || btn.disabled) return;
+
+            // Play button click animation
+            btn.disabled = true;
+            btn.className = 'w-full bg-[#f87171]/40 text-white/50 font-extrabold py-2 rounded-lg text-[10px] md:text-xs transition-all shadow-inner cursor-not-allowed flex items-center justify-center gap-1';
+            btn.innerHTML = `<i data-lucide="loader" class="w-3 md:w-3.5 h-3 md:h-3.5 animate-spin"></i> Enviando...`;
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+
+            // Hide tooltip
+            const tooltip = document.getElementById('whatsapp-tooltip');
+            if (tooltip) {
+                tooltip.classList.add('opacity-0', 'pointer-events-none', 'scale-95');
+            }
+
+            // Auto switch tab back to whatsapp on mobile layout to see the message send
+            if (window.innerWidth < 768) {
+                setTimeout(() => {
+                    switchMobileTab('whatsapp');
+                }, 400);
+            }
+
+            // Wait a moment, then append the WhatsApp announcement
+            setTimeout(() => {
+                btn.className = 'w-full bg-success text-primary-dark font-extrabold py-2 rounded-lg text-[10px] md:text-xs transition-all shadow-md flex items-center justify-center gap-1';
+                btn.innerHTML = `<i data-lucide="check" class="w-3 md:w-3.5 h-3 md:h-3.5"></i> Enviado`;
+                if (typeof lucide !== 'undefined') {
+                    lucide.createIcons();
+                }
+
+                // Show bot typing response in WhatsApp chat
+                showTypingIndicator();
+
+                setTimeout(() => {
+                    removeTypingIndicator();
+
+                    // Format Debtor alert announcement
+                    const feeAvulsoVal = window.gameState.feeAvulso !== undefined ? window.gameState.feeAvulso : 25;
+                    const feeMensalVal = window.gameState.feeMensal !== undefined ? window.gameState.feeMensal : 80;
+
+                    const debtorMsg = `⚠️ Atenção Devedores ⚠️
+
+💰 Segue a lista atualizada de pendências financeiras dos jogadores:
+
+*Avulsos*
+Thiago (11/07) : R$ ${feeAvulsoVal.toFixed(2)}
+
+Por favor, regularizem suas pendências o quanto antes para evitar suspensões.
+
+Avulso: R$ ${feeAvulsoVal.toFixed(2)}
+Mensal: R$ ${feeMensalVal.toFixed(2)}
+
+🔑 Pix para pix@partidinha.com`;
+
+                    appendBotMessage(debtorMsg);
+
+                    // Show Next step button
+                    const nextBtn = document.getElementById('btn-next-step');
+                    if (nextBtn) {
+                        nextBtn.classList.remove('hidden');
+                        nextBtn.innerHTML = `<span>Avançar para o Passo 4</span> <i data-lucide="arrow-right" class="w-5 h-5"></i>`;
+                        if (typeof lucide !== 'undefined') {
+                            lucide.createIcons();
+                        }
+                    }
+                }, 1000);
+            }, 800);
+        }
+
+        // Initialize Step 3
+        function initializeStep3() {
+            // Set up active tab inside the mobile app to 'financeiro'
+            window.gameState.appTab = 'financeiro';
+            syncMobileAppScreen();
+
+            // Set up input views: hide both step 1 and step 2 inputs
+            const inputStep1 = document.getElementById('whatsapp-input-step1');
+            const inputStep2 = document.getElementById('whatsapp-input-step2');
+            if (inputStep1) inputStep1.classList.add('hidden');
+            if (inputStep2) inputStep2.classList.add('hidden');
+
+            // Show tooltip prompting the user to click "Cobrar Inadimplente" in the app simulator
+            showTooltip('<i data-lucide="info" class="w-4 h-4"></i> Acesse a aba <strong class="underline">Financeiro</strong> no aplicativo e clique em <strong class="underline">Cobrar Inadimplente</strong>.');
+
+            appendSystemMessage('⚠️ Passo 3: Cobrança Automática iniciada.');
+            
             // Hide the next step button until the simulation is completed
             const nextBtn = document.getElementById('btn-next-step');
             if (nextBtn) {
@@ -889,6 +1061,11 @@
                 initializeStep1();
             } else if (step === 2) {
                 initializeStep2();
+            } else if (step === 3) {
+                initializeStep3();
+            } else if (step === 4) {
+                // Step 4 Placeholder - will be implemented in Task 6
+                appendSystemMessage('🏆 Passo 4: Ranking & Engajamento.');
             }
         }
 
@@ -1047,7 +1224,10 @@
                             const nextBtn = document.getElementById('btn-next-step');
                             if (nextBtn) {
                                 nextBtn.classList.remove('hidden');
-                                nextBtn.textContent = 'Avançar para o Passo 2';
+                                nextBtn.innerHTML = `<span>Avançar para o Passo 2</span> <i data-lucide="arrow-right" class="w-5 h-5"></i>`;
+                                if (typeof lucide !== 'undefined') {
+                                    lucide.createIcons();
+                                }
                             }
                         } else {
                             // Manual list flow - ask for player names inside chat overlay
@@ -1098,7 +1278,10 @@
                         const nextBtn = document.getElementById('btn-next-step');
                         if (nextBtn) {
                             nextBtn.classList.remove('hidden');
-                            nextBtn.textContent = 'Avançar para o Passo 3';
+                            nextBtn.innerHTML = `<span>Avançar para o Passo 3</span> <i data-lucide="arrow-right" class="w-5 h-5"></i>`;
+                            if (typeof lucide !== 'undefined') {
+                                lucide.createIcons();
+                            }
                         }
                     }, 1000);
                 });
@@ -1130,6 +1313,12 @@
                             switchMobileTab('whatsapp');
                         }
                         goToStep(3);
+                    } else if (window.gameState.step === 3) {
+                        // Switch view on mobile to show app for the ranking simulation
+                        if (window.innerWidth < 768) {
+                            switchMobileTab('app');
+                        }
+                        goToStep(4);
                     }
                 });
             }
