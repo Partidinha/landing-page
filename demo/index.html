@@ -1010,6 +1010,346 @@ Mensal: R$ ${feeMensalVal.toFixed(2)}
             }
         }
 
+        // Step 4 Helper Functions
+        window.adjustScore = function(team, delta) {
+            const scoreEl = document.getElementById(`score-${team}`);
+            if (scoreEl) {
+                let current = parseInt(scoreEl.textContent) || 0;
+                current = Math.max(0, current + delta);
+                scoreEl.textContent = current;
+            }
+        };
+
+        function getPlayerOptionsHTML() {
+            const players = window.gameState.players || [];
+            let options = '<option value="">Selecione um jogador</option>';
+            players.forEach(p => {
+                options += `<option value="${p}">${p}</option>`;
+            });
+            return options;
+        }
+
+        function appendRankingCardMessage() {
+            const chatBody = document.getElementById('whatsapp-chat-body');
+            if (!chatBody) return;
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'self-start bg-[#202c33] text-white text-xs md:text-sm px-3.5 py-2 rounded-xl rounded-tl-none max-w-[85%] shadow-md relative my-1 w-full';
+            
+            const now = new Date();
+            const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+            const gameDate = getNextGameDate(window.gameState.gameDay);
+            
+            msgDiv.innerHTML = `
+                <div class="p-2">
+                    <div style="background-color: #f8fafc; color: #0f172a; border-radius: 8px; padding: 12px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; text-align: left;">
+                         <!-- Header -->
+                         <div style="margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;">
+                             <div style="font-size: 11px; font-weight: 700; color: #3b82f6; text-transform: uppercase; letter-spacing: 0.05em;">
+                                 Grupo ${window.gameState.groupName}
+                             </div>
+                             <div style="display: flex; align-items: center; gap: 4px; font-size: 11px; color: #64748b;">
+                                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block;">
+                                     <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                     <line x1="16" y1="2" x2="16" y2="6"></line>
+                                     <line x1="8" y1="2" x2="8" y2="6"></line>
+                                     <line x1="3" y1="10" x2="21" y2="10"></line>
+                                 </svg>
+                                 ${gameDate}
+                             </div>
+                         </div>
+
+                         <!-- Table Card -->
+                         <div style="border-radius: 8px; border: 1px solid #e2e8f0; background-color: #ffffff; box-shadow: 0 1px 2px rgba(0,0,0,0.05); overflow: hidden;">
+                             <table style="width: 100%; border-collapse: collapse; text-align: center; font-size: 11px; table-layout: fixed;">
+                                 <colgroup>
+                                     <col style="width: 44%;">
+                                     <col style="width: 14%;">
+                                     <col style="width: 14%;">
+                                     <col style="width: 14%;">
+                                     <col style="width: 14%;">
+                                 </colgroup>
+                                 <thead>
+                                     <tr style="background-color: #f8fafc; border-bottom: 1px solid #e2e8f0;">
+                                         <th style="text-align: left; padding: 6px 8px; font-weight: 600; color: #64748b;">Jogador</th>
+                                         <th style="padding: 6px 4px; font-weight: 600; color: #64748b;">P</th>
+                                         <th style="padding: 6px 4px; font-weight: 600; color: #64748b;">G</th>
+                                         <th style="padding: 6px 4px; font-weight: 600; color: #64748b;">A</th>
+                                         <th style="padding: 6px 4px; font-weight: 600; color: #64748b;">PG/P</th>
+                                     </tr>
+                                 </thead>
+                                 <tbody>
+                                     <!-- Row 1 -->
+                                     <tr style="border-bottom: 1px solid #f1f5f9;">
+                                         <td style="text-align: left; padding: 6px 8px;">
+                                             <div style="display: flex; align-items: center; gap: 6px; min-width: 0;">
+                                                 <div style="position: relative; width: 24px; height: 24px; flex-shrink: 0;">
+                                                     <div style="width: 100%; height: 100%; border-radius: 50%; background-color: #e2e8f0; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="#94a3b8">
+                                                             <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                                                         </svg>
+                                                     </div>
+                                                     <div style="position: absolute; bottom: -3px; left: -3px; background-color: #F59E0B; color: white; font-size: 8px; font-weight: bold; width: 13px; height: 13px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1.5px solid #B45309; box-shadow: 0 0 0 1px white;">1º</div>
+                                                 </div>
+                                                 <div style="font-weight: 600; color: #334155; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">João</div>
+                                             </div>
+                                         </td>
+                                         <td style="color: #475569; padding: 6px 4px;">1</td>
+                                         <td style="font-weight: 600; color: #0f172a; padding: 6px 4px;">3</td>
+                                         <td style="color: #475569; padding: 6px 4px;">1</td>
+                                         <td style="font-weight: 600; color: #0ea5e9; padding: 6px 4px;">4.00</td>
+                                     </tr>
+                                     <!-- Row 2 -->
+                                     <tr style="border-bottom: 1px solid #f1f5f9;">
+                                         <td style="text-align: left; padding: 6px 8px;">
+                                             <div style="display: flex; align-items: center; gap: 6px; min-width: 0;">
+                                                 <div style="position: relative; width: 24px; height: 24px; flex-shrink: 0;">
+                                                     <div style="width: 100%; height: 100%; border-radius: 50%; background-color: #e2e8f0; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="#94a3b8">
+                                                             <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                                                         </svg>
+                                                     </div>
+                                                     <div style="position: absolute; bottom: -3px; left: -3px; background-color: #94A3B8; color: white; font-size: 8px; font-weight: bold; width: 13px; height: 13px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1.5px solid #475569; box-shadow: 0 0 0 1px white;">2º</div>
+                                                 </div>
+                                                 <div style="font-weight: 600; color: #334155; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Pedro</div>
+                                             </div>
+                                         </td>
+                                         <td style="color: #475569; padding: 6px 4px;">1</td>
+                                         <td style="font-weight: 600; color: #0f172a; padding: 6px 4px;">2</td>
+                                         <td style="color: #475569; padding: 6px 4px;">2</td>
+                                         <td style="font-weight: 600; color: #0ea5e9; padding: 6px 4px;">4.00</td>
+                                     </tr>
+                                     <!-- Row 3 -->
+                                     <tr style="border-bottom: 1px solid #f1f5f9;">
+                                         <td style="text-align: left; padding: 6px 8px;">
+                                             <div style="display: flex; align-items: center; gap: 6px; min-width: 0;">
+                                                 <div style="position: relative; width: 24px; height: 24px; flex-shrink: 0;">
+                                                     <div style="width: 100%; height: 100%; border-radius: 50%; background-color: #e2e8f0; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="#94a3b8">
+                                                             <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                                                         </svg>
+                                                     </div>
+                                                     <div style="position: absolute; bottom: -3px; left: -3px; background-color: #D97706; color: white; font-size: 8px; font-weight: bold; width: 13px; height: 13px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1.5px solid #78350F; box-shadow: 0 0 0 1px white;">3º</div>
+                                                 </div>
+                                                 <div style="font-weight: 600; color: #334155; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">André</div>
+                                             </div>
+                                         </td>
+                                         <td style="color: #475569; padding: 6px 4px;">1</td>
+                                         <td style="font-weight: 600; color: #0f172a; padding: 6px 4px;">2</td>
+                                         <td style="color: #475569; padding: 6px 4px;">1</td>
+                                         <td style="font-weight: 600; color: #0ea5e9; padding: 6px 4px;">3.00</td>
+                                     </tr>
+                                     <!-- Row 4 -->
+                                     <tr style="border-bottom: 1px solid #f1f5f9;">
+                                         <td style="text-align: left; padding: 6px 8px;">
+                                             <div style="display: flex; align-items: center; gap: 6px; min-width: 0;">
+                                                 <div style="position: relative; width: 24px; height: 24px; flex-shrink: 0;">
+                                                     <div style="width: 100%; height: 100%; border-radius: 50%; background-color: #e2e8f0; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="#94a3b8">
+                                                             <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                                                         </svg>
+                                                     </div>
+                                                     <div style="position: absolute; bottom: -3px; left: -3px; background-color: #51afeb; color: white; font-size: 8px; font-weight: bold; width: 13px; height: 13px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1.5px solid white;">4º</div>
+                                                 </div>
+                                                 <div style="font-weight: 600; color: #334155; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Zeca</div>
+                                             </div>
+                                         </td>
+                                         <td style="color: #475569; padding: 6px 4px;">1</td>
+                                         <td style="font-weight: 600; color: #0f172a; padding: 6px 4px;">1</td>
+                                         <td style="color: #475569; padding: 6px 4px;">1</td>
+                                         <td style="font-weight: 600; color: #0ea5e9; padding: 6px 4px;">2.00</td>
+                                     </tr>
+                                     <!-- Row 5 -->
+                                     <tr>
+                                         <td style="text-align: left; padding: 6px 8px;">
+                                             <div style="display: flex; align-items: center; gap: 6px; min-width: 0;">
+                                                 <div style="position: relative; width: 24px; height: 24px; flex-shrink: 0;">
+                                                     <div style="width: 100%; height: 100%; border-radius: 50%; background-color: #e2e8f0; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="#94a3b8">
+                                                             <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                                                         </svg>
+                                                     </div>
+                                                     <div style="position: absolute; bottom: -3px; left: -3px; background-color: #51afeb; color: white; font-size: 8px; font-weight: bold; width: 13px; height: 13px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1.5px solid white;">5º</div>
+                                                 </div>
+                                                 <div style="font-weight: 600; color: #334155; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Bruno</div>
+                                             </div>
+                                         </td>
+                                         <td style="color: #475569; padding: 6px 4px;">1</td>
+                                         <td style="font-weight: 600; color: #0f172a; padding: 6px 4px;">1</td>
+                                         <td style="color: #475569; padding: 6px 4px;">0</td>
+                                         <td style="font-weight: 600; color: #0ea5e9; padding: 6px 4px;">1.00</td>
+                                     </tr>
+                                 </tbody>
+                             </table>
+                         </div>
+                    </div>
+
+                    <!-- Button Area inside WhatsApp -->
+                    <div style="margin-top: 8px; border-top: 1px solid #2a3942; padding-top: 8px; text-align: center;">
+                        <button id="btn-ver-economia" onclick="triggerVerRelatorio()" class="w-full bg-[#2a3942] hover:bg-[#344654] active:bg-[#3d5364] text-[#00d4ff] font-extrabold py-2.5 rounded-lg text-xs transition-all flex items-center justify-center gap-1.5 shadow-md active:scale-[0.98]">
+                            <i data-lucide="trending-up" class="w-3.5 h-3.5"></i>
+                            Ver Relatório de Economia
+                        </button>
+                    </div>
+                </div>
+                <span class="absolute bottom-1 right-2 text-[9px] text-text-secondary select-none">${timeStr}</span>
+            `;
+            
+            chatBody.appendChild(msgDiv);
+            chatBody.scrollTop = chatBody.scrollHeight;
+            
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        }
+
+        window.triggerFinalizarRanking = function() {
+            const btn = document.getElementById('btn-finalizar-ranking');
+            if (!btn || btn.disabled) return;
+            
+            btn.disabled = true;
+            btn.innerHTML = \`<i class="w-3.5 h-3.5 animate-spin border-2 border-primary-dark border-t-transparent rounded-full mr-2"></i> Enviando...\`;
+            
+            // Hide tooltip
+            const tooltip = document.getElementById('whatsapp-tooltip');
+            if (tooltip) {
+                tooltip.classList.add('opacity-0', 'pointer-events-none', 'scale-95');
+            }
+
+            // Auto switch tab back to whatsapp on mobile layout to see the message send
+            if (window.innerWidth < 768) {
+                setTimeout(() => {
+                    switchMobileTab('whatsapp');
+                }, 400);
+            }
+
+            setTimeout(() => {
+                btn.className = 'w-full bg-success text-primary-dark font-extrabold py-2.5 rounded-lg text-xs transition-all shadow-md mt-4 flex items-center justify-center gap-1.5';
+                btn.innerHTML = \`<i data-lucide="check" class="w-3.5 h-3.5"></i> Enviado\`;
+                if (typeof lucide !== 'undefined') {
+                    lucide.createIcons();
+                }
+
+                // Show bot typing response in WhatsApp chat
+                showTypingIndicator();
+
+                setTimeout(() => {
+                    removeTypingIndicator();
+                    appendRankingCardMessage();
+                }, 1000);
+            }, 800);
+        };
+
+        window.triggerVerRelatorio = function() {
+            goToStep(5);
+        };
+
+        function initializeStep4() {
+            // Hide WhatsApp input steps
+            const inputStep1 = document.getElementById('whatsapp-input-step1');
+            const inputStep2 = document.getElementById('whatsapp-input-step2');
+            if (inputStep1) inputStep1.classList.add('hidden');
+            if (inputStep2) inputStep2.classList.add('hidden');
+
+            // Show tooltip prompting the user
+            showTooltip('<i data-lucide="info" class="w-4 h-4"></i> Insira o placar e os destaques no aplicativo, depois clique em <strong class="underline">Finalizar e Enviar Ranking</strong>.');
+
+            appendSystemMessage('🏆 Passo 4: Registrar estatísticas e gerar ranking.');
+
+            // Make sure gameState.players is populated
+            if (!window.gameState.players || window.gameState.players.length === 0) {
+                window.gameState.players = ['João', 'Pedro', 'André', 'Zeca', 'Bruno', 'Carlos', 'Felipe', 'Gustavo', 'Lucas', 'Mateus', 'Rafael', 'Rodrigo', 'Daniel', 'Diego', 'Gabriel'];
+            }
+
+            // Render the App Screen "Finalizar Partida"
+            const appScreenContent = document.getElementById('app-screen-content');
+            if (appScreenContent) {
+                const playerOptions = getPlayerOptionsHTML();
+                appScreenContent.innerHTML = \`
+                    <!-- Header -->
+                    <div class="flex items-center justify-between mb-3 border-b border-card-light pb-2 shrink-0">
+                        <div class="flex items-center gap-2">
+                            <img src="../images/logo.jpeg" alt="Partidinha" class="w-5 h-5 rounded-md">
+                            <span class="font-bold text-xs gradient-text">Partidinha App</span>
+                        </div>
+                        <span class="text-[9px] bg-accent/15 text-accent px-1.5 py-0.5 rounded-full font-mono font-bold">PRO</span>
+                    </div>
+
+                    <!-- Finalizar Partida Screen -->
+                    <div class="flex-grow flex flex-col justify-between overflow-y-auto chat-scroll pr-1">
+                        <div class="space-y-3 font-sans">
+                            <h3 class="font-bold text-xs text-white mb-2 flex items-center gap-1.5">
+                                <i data-lucide="trophy" class="w-4 h-4 text-accent"></i> Finalizar Partida
+                            </h3>
+                            
+                            <!-- Placar -->
+                            <div class="bg-card-light/40 border border-card-light rounded-xl p-3">
+                                <div class="text-[9px] text-text-secondary font-bold uppercase mb-2 text-center">Placar Final</div>
+                                <div class="flex items-center justify-around gap-2">
+                                    <!-- Time A (Red) -->
+                                    <div class="flex flex-col items-center">
+                                        <span class="text-[9px] font-semibold text-red-400 mb-1">Time Vermelho</span>
+                                        <div class="flex items-center gap-1.5">
+                                            <button type="button" onclick="adjustScore('A', -1)" class="w-5 h-5 rounded bg-card-light flex items-center justify-center text-white hover:bg-btn-secondary text-xs font-bold">-</button>
+                                            <span id="score-A" class="text-sm font-bold text-white w-4 text-center">3</span>
+                                            <button type="button" onclick="adjustScore('A', 1)" class="w-5 h-5 rounded bg-card-light flex items-center justify-center text-white hover:bg-btn-secondary text-xs font-bold">+</button>
+                                        </div>
+                                    </div>
+                                    <div class="text-text-secondary text-xs font-bold">X</div>
+                                    <!-- Time B (Blue) -->
+                                    <div class="flex flex-col items-center">
+                                        <span class="text-[9px] font-semibold text-blue-400 mb-1">Time Azul</span>
+                                        <div class="flex items-center gap-1.5">
+                                            <button type="button" onclick="adjustScore('B', -1)" class="w-5 h-5 rounded bg-card-light flex items-center justify-center text-white hover:bg-btn-secondary text-xs font-bold">-</button>
+                                            <span id="score-B" class="text-sm font-bold text-white w-4 text-center">2</span>
+                                            <button type="button" onclick="adjustScore('B', 1)" class="w-5 h-5 rounded bg-card-light flex items-center justify-center text-white hover:bg-btn-secondary text-xs font-bold">+</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Destaques Dropdowns -->
+                            <div class="space-y-2">
+                                <div>
+                                    <label for="select-craque" class="block text-[10px] font-semibold text-text-secondary mb-1">⭐ Craque do Jogo</label>
+                                    <select id="select-craque" class="w-full bg-card-light border border-btn-secondary rounded-lg px-2 py-1 text-xs text-white focus:outline-none focus:border-accent">
+                                        ${playerOptions}
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="select-artilheiro" class="block text-[10px] font-semibold text-text-secondary mb-1">⚽ Artilheiro</label>
+                                    <select id="select-artilheiro" class="w-full bg-card-light border border-btn-secondary rounded-lg px-2 py-1 text-xs text-white focus:outline-none focus:border-accent">
+                                        ${playerOptions}
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="select-pior" class="block text-[10px] font-semibold text-text-secondary mb-1">☠️ Pior em Campo</label>
+                                    <select id="select-pior" class="w-full bg-card-light border border-btn-secondary rounded-lg px-2 py-1 text-xs text-white focus:outline-none focus:border-accent">
+                                        ${playerOptions}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Button -->
+                        <button id="btn-finalizar-ranking" onclick="triggerFinalizarRanking()" class="w-full bg-accent hover:bg-accent-light text-primary-dark font-extrabold py-2.5 rounded-lg text-xs transition-all shadow-md mt-4 flex items-center justify-center gap-1.5 hover:scale-[1.01] active:scale-[0.99]">
+                            <i data-lucide="check" class="w-3.5 h-3.5"></i>
+                            Finalizar e Enviar Ranking
+                        </button>
+                    </div>
+                \`;
+            }
+
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+
+            // Hide the next step button until the simulation is completed
+            const nextBtn = document.getElementById('btn-next-step');
+            if (nextBtn) {
+                nextBtn.classList.add('hidden');
+            }
+        }
+
         // General Step Management
         function goToStep(step) {
             window.gameState.step = step;
@@ -1064,8 +1404,10 @@ Mensal: R$ ${feeMensalVal.toFixed(2)}
             } else if (step === 3) {
                 initializeStep3();
             } else if (step === 4) {
-                // Step 4 Placeholder - will be implemented in Task 6
-                appendSystemMessage('🏆 Passo 4: Ranking & Engajamento.');
+                initializeStep4();
+            } else if (step === 5) {
+                // Will be fully implemented in Task 7
+                appendSystemMessage('📈 Passo 5: Economia Calculada.');
             }
         }
 
