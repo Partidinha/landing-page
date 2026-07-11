@@ -144,9 +144,9 @@
                                     <option value="Segunda">Segunda-feira</option>
                                     <option value="Terça">Terça-feira</option>
                                     <option value="Quarta">Quarta-feira</option>
-                                    <option value="Quinta" selected>Quinta-feira</option>
+                                    <option value="Quinta">Quinta-feira</option>
                                     <option value="Sexta">Sexta-feira</option>
-                                    <option value="Sábado">Sábado</option>
+                                    <option value="Sábado" selected>Sábado</option>
                                     <option value="Domingo">Domingo</option>
                                 </select>
                                 <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-text-secondary">
@@ -182,7 +182,7 @@
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-text-secondary">
                                     <span class="font-semibold text-sm">R$</span>
                                 </div>
-                                <input type="number" id="fee-avulso" name="fee-avulso" min="0" value="25" required
+                                <input type="number" id="fee-avulso" name="fee-avulso" min="0" value="15" required
                                     class="w-full bg-card-light border border-btn-secondary rounded-xl pl-10 pr-4 py-3 focus:outline-none focus:border-accent transition-colors text-white">
                             </div>
                         </div>
@@ -193,37 +193,21 @@
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-text-secondary">
                                     <span class="font-semibold text-sm">R$</span>
                                 </div>
-                                <input type="number" id="fee-mensal" name="fee-mensal" min="0" value="80" required
+                                <input type="number" id="fee-mensal" name="fee-mensal" min="0" value="45" required
                                     class="w-full bg-card-light border border-btn-secondary rounded-xl pl-10 pr-4 py-3 focus:outline-none focus:border-accent transition-colors text-white">
                             </div>
                         </div>
                     </div>
 
-                    <!-- Tipo de Lista (Player Population Choice) -->
+                    <!-- Average Players Per Game -->
                     <div>
-                        <label class="block text-sm font-semibold text-text-secondary mb-3">Tipo de Lista (Jogadores)</label>
-                        <div class="grid grid-cols-2 gap-4">
-                            <label class="relative flex flex-col p-4 bg-card-light hover:bg-card-light/80 border border-transparent rounded-xl cursor-pointer transition-all">
-                                <input type="radio" name="list-type" value="ficticios" checked class="sr-only peer">
-                                <div class="peer-checked:border-accent border-2 border-transparent absolute inset-0 rounded-xl pointer-events-none transition-all"></div>
-                                <div class="absolute top-4 right-4 w-4 h-4 rounded-full border border-text-secondary peer-checked:border-accent peer-checked:bg-accent transition-all z-10"></div>
-                                <div class="absolute top-[21px] right-[21px] w-1.5 h-1.5 rounded-full bg-transparent peer-checked:bg-primary-dark transition-all z-10"></div>
-                                <div class="flex items-center justify-between mb-2 z-10">
-                                    <span class="font-semibold text-white text-sm">Fictícios</span>
-                                </div>
-                                <span class="text-xs text-text-secondary leading-relaxed z-10">Carrega 15 jogadores fictícios para teste rápido.</span>
-                            </label>
-                            
-                            <label class="relative flex flex-col p-4 bg-card-light hover:bg-card-light/80 border border-transparent rounded-xl cursor-pointer transition-all">
-                                <input type="radio" name="list-type" value="manual" class="sr-only peer">
-                                <div class="peer-checked:border-accent border-2 border-transparent absolute inset-0 rounded-xl pointer-events-none transition-all"></div>
-                                <div class="absolute top-4 right-4 w-4 h-4 rounded-full border border-text-secondary peer-checked:border-accent peer-checked:bg-accent transition-all z-10"></div>
-                                <div class="absolute top-[21px] right-[21px] w-1.5 h-1.5 rounded-full bg-transparent peer-checked:bg-primary-dark transition-all z-10"></div>
-                                <div class="flex items-center justify-between mb-2 z-10">
-                                    <span class="font-semibold text-white text-sm">Manual</span>
-                                </div>
-                                <span class="text-xs text-text-secondary leading-relaxed z-10">Você poderá digitar o nome dos jogadores na simulação.</span>
-                            </label>
+                        <label for="avg-players" class="block text-sm font-semibold text-text-secondary mb-2">Jogadores na lista em média por jogo</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-text-secondary">
+                                <i data-lucide="users" class="w-5 h-5"></i>
+                            </div>
+                            <input type="number" id="avg-players" name="avg-players" min="3" max="30" value="15" required
+                                class="w-full bg-card-light border border-btn-secondary rounded-xl pl-10 pr-4 py-3 focus:outline-none focus:border-accent transition-colors text-white">
                         </div>
                     </div>
 
@@ -331,7 +315,7 @@
                         <div id="whatsapp-tooltip" class="absolute left-4 right-4 bottom-full mb-3 bg-gradient-to-r from-accent to-accent-light text-primary-dark font-bold text-xs md:text-sm py-3 px-4 rounded-xl shadow-xl flex items-center justify-between border border-accent/20 transition-all duration-300">
                             <span class="flex items-center gap-2">
                                 <i data-lucide="info" class="w-4 h-4"></i>
-                                Envie <strong class="underline">/lista</strong> no WhatsApp para ver a lista de presença.
+                                Envie <strong class="underline">@Partidinha Bot lista</strong> no WhatsApp para ver a lista de presença.
                             </span>
                             <button id="close-tooltip" class="hover:opacity-75 transition-opacity">
                                 <i data-lucide="x" class="w-4 h-4"></i>
@@ -407,7 +391,7 @@
                                     <i data-lucide="smartphone" class="w-5 h-5"></i>
                                 </div>
                                 <h4 class="font-bold text-xs text-white mb-1">Aguardando Sincronização</h4>
-                                <p class="text-[10px] text-text-secondary leading-normal">Envie <code class="bg-[#1f2937] px-1 py-0.5 rounded text-accent font-mono">/lista</code> no WhatsApp para ver os dados sincronizarem em tempo real aqui.</p>
+                                <p class="text-[10px] text-text-secondary leading-normal">Envie <code class="bg-[#1f2937] px-1 py-0.5 rounded text-accent font-mono">@Partidinha Bot lista</code> no WhatsApp para ver os dados sincronizarem em tempo real aqui.</p>
                             </div>
                         </div>
                     </div>
@@ -450,12 +434,51 @@
             gameDay: '',
             frequency: 'semanal',
             frequencyMultiplier: 4,
-            feeAvulso: 25,
-            feeMensal: 80,
+            feeAvulso: 15,
+            feeMensal: 45,
             listType: 'ficticios',
+            playersPerGame: 15,
             step: 1,
             players: []
         };
+
+        // Pool of fictitious player names used to build the demo list
+        const FICTICIOS_NAME_POOL = [
+            'João', 'Pedro', 'André', 'Zeca', 'Bruno', 'Carlos', 'Felipe', 'Gustavo', 'Lucas', 'Mateus',
+            'Rafael', 'Rodrigo', 'Daniel', 'Diego', 'Gabriel', 'Vinícius', 'Eduardo', 'Marcelo', 'Leonardo', 'Fernando',
+            'Ricardo', 'Alexandre', 'Vitor', 'Renato', 'Henrique', 'Otávio', 'Caio', 'Igor', 'Rogério', 'Renan'
+        ];
+
+        // Generate a fictitious player list with the configured average size
+        function generateFicticiosPlayers(count) {
+            const size = Math.max(1, Math.min(count || 15, FICTICIOS_NAME_POOL.length));
+            return FICTICIOS_NAME_POOL.slice(0, size);
+        }
+
+        // Build the "/lista" WhatsApp message for a given set of players
+        function buildListaMessage(players) {
+            const maxConfirmed = 12;
+            const confirmed = players.slice(0, maxConfirmed);
+            const reservas = players.slice(maxConfirmed);
+
+            const confirmedLines = confirmed.map((name, i) => `${i + 1}. ${name}`).join('\n');
+            const reservasLines = reservas.length > 0
+                ? reservas.map((name, i) => `${maxConfirmed + i + 1}. ${name}`).join('\n')
+                : '(Nenhum suplente)';
+
+            const gameDate = getNextGameDate(window.gameState.gameDay);
+
+            return `⚽️ ${window.gameState.groupName} (${window.gameState.gameDay}, ${gameDate} 19:00) ⚽️
+
+📌 LISTA DO GRUPO
+
+${confirmedLines}
+
+🎽 Suplentes
+• entram automaticamente na lista caso alguém desista
+
+${reservasLines}`;
+        }
 
         // Utility: get next date for a day name
         function getNextGameDate(targetDayName) {
@@ -531,20 +554,21 @@
             }
         }
 
-        function appendBotMessage(text) {
+        function appendBotMessage(text, shouldShowBotName = true) {
             const chatBody = document.getElementById('whatsapp-chat-body');
             if (!chatBody) return;
             const msgDiv = document.createElement('div');
-            msgDiv.className = 'self-start bg-[#202c33] text-white text-xs md:text-sm px-3.5 py-2 rounded-xl rounded-tl-none max-w-[85%] shadow-md relative my-1 font-mono whitespace-pre-wrap leading-relaxed';
+            msgDiv.className = 'self-start bg-[#202c33] text-white text-xs md:text-sm px-3.5 py-2 rounded-xl max-w-[85%] shadow-md relative my-1 font-mono whitespace-pre-wrap leading-relaxed';
             
             const now = new Date();
             const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
             
             msgDiv.innerHTML = `
+                ${shouldShowBotName ? `<div class="font-semibold text-[10px] mb-0.5" style="color: #00d4ff;">Partidinha Bot</div>` : ''}
                 <div class="pr-6 break-words">${text}</div>
                 <span class="absolute bottom-1 right-2 text-[9px] text-text-secondary select-none">${timeStr}</span>
             `;
-            
+
             chatBody.appendChild(msgDiv);
             chatBody.scrollTop = chatBody.scrollHeight;
         }
@@ -744,7 +768,7 @@
                                 ${isStep3 ? `
                                 <button id="btn-cobrar-inadimplente" onclick="triggerCobrarInadimplente()" class="w-full bg-red-500 hover:bg-red-600 active:bg-red-700 text-white font-extrabold py-2 rounded-lg text-[10px] md:text-xs transition-all shadow-md flex items-center justify-center gap-1 hover:scale-[1.01] active:scale-[0.99]">
                                     <i data-lucide="bell" class="w-3 md:w-3.5 h-3 md:h-3.5"></i>
-                                    Cobrar Inadimplente
+                                    Cobrar Inadimplentes
                                 </button>
                                 ` : `
                                 <button disabled class="w-full bg-card-light text-text-secondary font-extrabold py-2 rounded-lg text-[10px] md:text-xs shadow-inner cursor-not-allowed flex items-center justify-center gap-1">
@@ -835,7 +859,7 @@
             if (inputStep2) inputStep2.classList.add('hidden');
             
             // Show Tooltip with default message
-            showTooltip('<i data-lucide="info" class="w-4 h-4"></i> Envie <strong class="underline">/lista</strong> no WhatsApp para ver a lista de presença.');
+            showTooltip('<i data-lucide="info" class="w-4 h-4"></i> Envie <strong class="underline">@Partidinha Bot lista</strong> no WhatsApp para ver a lista de presença.');
             
             // Enable send list button and restore styles
             const sendBtn = document.getElementById('btn-send-lista');
@@ -866,7 +890,7 @@
                             <i data-lucide="smartphone" class="w-5 h-5"></i>
                         </div>
                         <h4 class="font-bold text-xs text-white mb-1">Aguardando Sincronização</h4>
-                        <p class="text-[10px] text-text-secondary leading-normal">Envie <code class="bg-[#1f2937] px-1 py-0.5 rounded text-accent font-mono">/lista</code> no WhatsApp para ver os dados sincronizarem em tempo real aqui.</p>
+                        <p class="text-[10px] text-text-secondary leading-normal">Envie <code class="bg-[#1f2937] px-1 py-0.5 rounded text-accent font-mono">@Partidinha Bot lista</code> no WhatsApp para ver os dados sincronizarem em tempo real aqui.</p>
                     </div>
                 `;
             }
@@ -880,7 +904,7 @@
         function initializeStep2() {
             // Restore/show mobile app screen with default players if empty
             if (!window.gameState.players || window.gameState.players.length === 0) {
-                window.gameState.players = ['João', 'Pedro', 'André', 'Zeca', 'Bruno', 'Carlos', 'Felipe', 'Gustavo', 'Lucas', 'Mateus', 'Rafael', 'Rodrigo', 'Daniel', 'Diego', 'Gabriel'];
+                window.gameState.players = generateFicticiosPlayers(window.gameState.playersPerGame);
             }
             window.gameState.appTab = 'jogadores';
             syncMobileAppScreen();
@@ -902,7 +926,7 @@
             showTooltip('<i data-lucide="info" class="w-4 h-4"></i> Thiago tenta confirmar presença no grupo de WhatsApp.');
 
             appendSystemMessage('⚠️ Passo 2: Bloqueio Automatizado iniciado.');
-            appendBotMessage('Thiago (inadimplente) tentará se inscrever na lista.');
+            // appendBotMessage('Thiago (inadimplente) tentará se inscrever na lista.', false);
 
             // Hide the next step button until the simulation is completed
             const nextBtn = document.getElementById('btn-next-step');
@@ -964,17 +988,15 @@
 
                     const debtorMsg = `⚠️ Atenção Devedores ⚠️
 
-💰 Segue a lista atualizada de pendências financeiras dos jogadores:
-
 *Avulsos*
-Thiago (11/07) : R$ ${feeAvulsoVal.toFixed(2)}
+💰 Thiago (11/07) : R$ ${feeAvulsoVal.toFixed(2)}
 
 Por favor, regularizem suas pendências o quanto antes para evitar suspensões.
 
 Avulso: R$ ${feeAvulsoVal.toFixed(2)}
 Mensal: R$ ${feeMensalVal.toFixed(2)}
 
-🔑 Pix para pix@partidinha.com`;
+🔑 Pix para suachave@pix.com`;
 
                     appendBotMessage(debtorMsg);
 
@@ -1003,8 +1025,8 @@ Mensal: R$ ${feeMensalVal.toFixed(2)}
             if (inputStep1) inputStep1.classList.add('hidden');
             if (inputStep2) inputStep2.classList.add('hidden');
 
-            // Show tooltip prompting the user to click "Cobrar Inadimplente" in the app simulator
-            showTooltip('<i data-lucide="info" class="w-4 h-4"></i> Acesse a aba <strong class="underline">Financeiro</strong> no aplicativo e clique em <strong class="underline">Cobrar Inadimplente</strong>.');
+            // Show tooltip prompting the user to click "Cobrar Inadimplentes" in the app simulator
+            showTooltip('<i data-lucide="info" class="w-4 h-4"></i> Acesse a aba <strong class="underline">Financeiro</strong> no aplicativo e clique em <strong class="underline">Cobrar Inadimplentes</strong>.');
 
             appendSystemMessage('⚠️ Passo 3: Cobrança Automática iniciada.');
             
@@ -1025,14 +1047,62 @@ Mensal: R$ ${feeMensalVal.toFixed(2)}
             }
         };
 
-        function getPlayerOptionsHTML() {
-            const players = window.gameState.players || [];
-            let options = '<option value="">Selecione um jogador</option>';
-            players.forEach(p => {
-                options += `<option value="${p}">${p}</option>`;
-            });
-            return options;
+        function getTeamPlayersHTML(team, players) {
+            const alignClass = team === 'A' ? '' : 'justify-end text-right';
+            return (players || [])
+                .map(
+                    (name) => `
+                        <button type="button" onclick="openStatPicker('${team}', '${name}')" class="flex items-center gap-1.5 ${alignClass} hover:bg-btn-secondary/40 rounded-md px-1 py-0.5 transition-colors w-full">
+                            <span class="text-[10px] text-white/80 truncate">${name}</span>
+                        </button>
+                    `,
+                )
+                .join('');
         }
+
+        window.openStatPicker = function(team, playerName) {
+            window.gameState.statPickerContext = { team, playerName };
+
+            const nameEl = document.getElementById('stat-picker-player-name');
+            if (nameEl) nameEl.textContent = playerName;
+
+            const backdrop = document.getElementById('stat-picker-backdrop');
+            if (backdrop) {
+                backdrop.classList.remove('opacity-0', 'pointer-events-none');
+            }
+
+            const sheet = document.getElementById('stat-picker-sheet');
+            if (sheet) {
+                sheet.classList.remove('translate-y-full');
+            }
+        };
+
+        window.closeStatPicker = function() {
+            window.gameState.statPickerContext = null;
+
+            const backdrop = document.getElementById('stat-picker-backdrop');
+            if (backdrop) {
+                backdrop.classList.add('opacity-0', 'pointer-events-none');
+            }
+
+            const sheet = document.getElementById('stat-picker-sheet');
+            if (sheet) {
+                sheet.classList.add('translate-y-full');
+            }
+        };
+
+        window.recordStat = function(statSlug) {
+            const ctx = window.gameState.statPickerContext;
+            if (!ctx) return;
+
+            if (statSlug === 'gol') {
+                adjustScore(ctx.team, 1);
+            } else if (statSlug === 'gol_contra') {
+                adjustScore(ctx.team === 'A' ? 'B' : 'A', 1);
+            }
+
+            closeStatPicker();
+        };
 
         function appendRankingCardMessage() {
             const chatBody = document.getElementById('whatsapp-chat-body');
@@ -1046,6 +1116,7 @@ Mensal: R$ ${feeMensalVal.toFixed(2)}
             
             msgDiv.innerHTML = `
                 <div class="p-2">
+                    <div class="font-semibold text-[10px] mb-1.5" style="color: #00d4ff;">Partidinha Bot</div>
                     <div style="background-color: #f8fafc; color: #0f172a; border-radius: 8px; padding: 12px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; text-align: left;">
                          <!-- Header -->
                          <div style="margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;">
@@ -1242,7 +1313,7 @@ Mensal: R$ ${feeMensalVal.toFixed(2)}
             if (!btn || btn.disabled) return;
             
             btn.disabled = true;
-            btn.innerHTML = \`<i class="w-3.5 h-3.5 animate-spin border-2 border-primary-dark border-t-transparent rounded-full mr-2"></i> Enviando...\`;
+            btn.innerHTML = `<i class="w-3.5 h-3.5 animate-spin border-2 border-primary-dark border-t-transparent rounded-full mr-2"></i> Enviando...`;
             
             // Hide tooltip
             const tooltip = document.getElementById('whatsapp-tooltip');
@@ -1259,7 +1330,7 @@ Mensal: R$ ${feeMensalVal.toFixed(2)}
 
             setTimeout(() => {
                 btn.className = 'w-full bg-success text-primary-dark font-extrabold py-2.5 rounded-lg text-xs transition-all shadow-md mt-4 flex items-center justify-center gap-1.5';
-                btn.innerHTML = \`<i data-lucide="check" class="w-3.5 h-3.5"></i> Enviado\`;
+                btn.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5"></i> Enviado`;
                 if (typeof lucide !== 'undefined') {
                     lucide.createIcons();
                 }
@@ -1286,20 +1357,33 @@ Mensal: R$ ${feeMensalVal.toFixed(2)}
             if (inputStep2) inputStep2.classList.add('hidden');
 
             // Show tooltip prompting the user
-            showTooltip('<i data-lucide="info" class="w-4 h-4"></i> Insira o placar e os destaques no aplicativo, depois clique em <strong class="underline">Finalizar e Enviar Ranking</strong>.');
+            showTooltip('<i data-lucide="info" class="w-4 h-4"></i> Toque nos jogadores para lançar estatísticas no aplicativo, depois clique em <strong class="underline">Finalizar e Enviar Ranking</strong>.');
 
             appendSystemMessage('🏆 Passo 4: Registrar estatísticas e gerar ranking.');
 
             // Make sure gameState.players is populated
             if (!window.gameState.players || window.gameState.players.length === 0) {
-                window.gameState.players = ['João', 'Pedro', 'André', 'Zeca', 'Bruno', 'Carlos', 'Felipe', 'Gustavo', 'Lucas', 'Mateus', 'Rafael', 'Rodrigo', 'Daniel', 'Diego', 'Gabriel'];
+                window.gameState.players = generateFicticiosPlayers(window.gameState.playersPerGame);
+            }
+
+            // Split players into two fixed 5-a-side teams (once) for the Finalizar Partida screen.
+            // Always exactly 5x5, independent of the configured average players per game.
+            if (!window.gameState.matchTeams) {
+                const teamSize = 5;
+                const matchRoster = generateFicticiosPlayers(teamSize * 2);
+                window.gameState.matchTeams = {
+                    A: matchRoster.slice(0, teamSize),
+                    B: matchRoster.slice(teamSize, teamSize * 2),
+                };
             }
 
             // Render the App Screen "Finalizar Partida"
             const appScreenContent = document.getElementById('app-screen-content');
             if (appScreenContent) {
-                const playerOptions = getPlayerOptionsHTML();
-                appScreenContent.innerHTML = \`
+                const teamAPlayersHTML = getTeamPlayersHTML('A', window.gameState.matchTeams.A);
+                const teamBPlayersHTML = getTeamPlayersHTML('B', window.gameState.matchTeams.B);
+
+                appScreenContent.innerHTML = `
                     <!-- Header -->
                     <div class="flex items-center justify-between mb-3 border-b border-card-light pb-2 shrink-0">
                         <div class="flex items-center gap-2">
@@ -1315,7 +1399,7 @@ Mensal: R$ ${feeMensalVal.toFixed(2)}
                             <h3 class="font-bold text-xs text-white mb-2 flex items-center gap-1.5">
                                 <i data-lucide="trophy" class="w-4 h-4 text-accent"></i> Finalizar Partida
                             </h3>
-                            
+
                             <!-- Placar -->
                             <div class="bg-card-light/40 border border-card-light rounded-xl p-3">
                                 <div class="text-[9px] text-text-secondary font-bold uppercase mb-2 text-center">Placar Final</div>
@@ -1342,25 +1426,12 @@ Mensal: R$ ${feeMensalVal.toFixed(2)}
                                 </div>
                             </div>
 
-                            <!-- Destaques Dropdowns -->
-                            <div class="space-y-2">
-                                <div>
-                                    <label for="select-craque" class="block text-[10px] font-semibold text-text-secondary mb-1">⭐ Craque do Jogo</label>
-                                    <select id="select-craque" class="w-full bg-card-light border border-btn-secondary rounded-lg px-2 py-1 text-xs text-white focus:outline-none focus:border-accent">
-                                        ${playerOptions}
-                                    </select>
-                                </div>
-                                <div>
-                                    <label for="select-artilheiro" class="block text-[10px] font-semibold text-text-secondary mb-1">⚽ Artilheiro</label>
-                                    <select id="select-artilheiro" class="w-full bg-card-light border border-btn-secondary rounded-lg px-2 py-1 text-xs text-white focus:outline-none focus:border-accent">
-                                        ${playerOptions}
-                                    </select>
-                                </div>
-                                <div>
-                                    <label for="select-pior" class="block text-[10px] font-semibold text-text-secondary mb-1">☠️ Pior em Campo</label>
-                                    <select id="select-pior" class="w-full bg-card-light border border-btn-secondary rounded-lg px-2 py-1 text-xs text-white focus:outline-none focus:border-accent">
-                                        ${playerOptions}
-                                    </select>
+                            <!-- Team player lists -->
+                            <div class="bg-card-light/40 border border-card-light rounded-xl p-3">
+                                <div class="text-[9px] font-bold uppercase mb-2 text-center bg-amber-300 text-black mb-2">Toque em um jogador para lançar estatísticas</div>
+                                <div class="grid grid-cols-2 gap-x-2">
+                                    <div class="flex flex-col gap-1">${teamAPlayersHTML}</div>
+                                    <div class="flex flex-col gap-1 border-l border-card-light pl-2">${teamBPlayersHTML}</div>
                                 </div>
                             </div>
                         </div>
@@ -1371,7 +1442,30 @@ Mensal: R$ ${feeMensalVal.toFixed(2)}
                             Finalizar e Enviar Ranking
                         </button>
                     </div>
-                \`;
+
+                    <!-- Stat Picker Bottom Sheet -->
+                    <div id="stat-picker-backdrop" onclick="closeStatPicker()" class="absolute inset-0 bg-black/50 opacity-0 pointer-events-none transition-opacity duration-200 z-30"></div>
+                    <div id="stat-picker-sheet" class="absolute left-0 right-0 bottom-0 bg-[#1c2733] border-t border-card-light rounded-t-2xl p-3 translate-y-full transition-transform duration-200 z-40 shadow-2xl">
+                        <div class="flex items-center justify-between mb-3">
+                            <span id="stat-picker-player-name" class="text-xs font-bold text-white"></span>
+                            <button type="button" onclick="closeStatPicker()" class="text-text-secondary hover:text-white text-xs">✕</button>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2">
+                            <button type="button" onclick="recordStat('gol')" class="flex flex-col items-center justify-center gap-1 bg-card-light rounded-xl py-3 px-1 hover:bg-btn-secondary active:scale-95 transition-all">
+                                <span class="text-lg">⚽</span>
+                                <span class="text-[9px] font-medium text-white/80 text-center leading-tight">Gol</span>
+                            </button>
+                            <button type="button" onclick="recordStat('gol_contra')" class="flex flex-col items-center justify-center gap-1 bg-card-light rounded-xl py-3 px-1 hover:bg-btn-secondary active:scale-95 transition-all">
+                                <span class="text-lg">🥅</span>
+                                <span class="text-[9px] font-medium text-white/80 text-center leading-tight">Gol Contra</span>
+                            </button>
+                            <button type="button" onclick="recordStat('cartao_amarelo')" class="flex flex-col items-center justify-center gap-1 bg-card-light rounded-xl py-3 px-1 hover:bg-btn-secondary active:scale-95 transition-all">
+                                <span class="text-lg">🟨</span>
+                                <span class="text-[9px] font-medium text-white/80 text-center leading-tight">Cartão Amarelo</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
             }
 
             if (typeof lucide !== 'undefined') {
@@ -1464,7 +1558,7 @@ Mensal: R$ ${feeMensalVal.toFixed(2)}
         function initializeStep5() {
             appendSystemMessage('📈 Passo 5: Economia Calculada.');
 
-            const playersCount = window.gameState.players.length || 15;
+            const playersCount = window.gameState.players.length || window.gameState.playersPerGame || 15;
             const frequencyMultiplier = window.gameState.frequencyMultiplier || 4;
             const frequencyStr = window.gameState.frequency || 'semanal';
             const feeAvulsoVal = window.gameState.feeAvulso !== undefined ? window.gameState.feeAvulso : 25;
@@ -1472,7 +1566,11 @@ Mensal: R$ ${feeMensalVal.toFixed(2)}
 
             const total_mensal = playersCount * frequencyMultiplier;
             const horas_perdidas = (total_mensal * 8) / 60;
-            const prejuizo = (feeAvulsoVal * 2) + feeMensalVal;
+
+            const prejuizoBase = (feeAvulsoVal * 2) + feeMensalVal;
+            const multiplicadorJogadores = playersCount / 15;
+            const multiplicadorFrequencia = frequencyMultiplier / 4;
+            const prejuizo = prejuizoBase * multiplicadorJogadores * multiplicadorFrequencia;
 
             function formatHours(hoursDecimal) {
                 const totalMinutes = Math.round(hoursDecimal * 60);
@@ -1499,9 +1597,6 @@ Mensal: R$ ${feeMensalVal.toFixed(2)}
                         <h2 class="text-3xl font-extrabold text-white mb-4 tracking-tight">
                             Seu Relatório de Economia & ROI
                         </h2>
-                        <p class="text-sm md:text-base text-text-secondary max-w-2xl mx-auto leading-relaxed">
-                            Com lista de ~${playersCount} jogadores por dia de jogo e frequência ${frequencyStr}, você deve estar gastando cerca de ${formatHoursText} por mês organizando lista e cobrando marmanjo no grupo. Fora o prejuízo estimado de R$ ${prejuizo.toFixed(2).replace('.', ',')} com devedores. Com o partidinha esse tempo vai cair pra menos de 5 minutos por semana e zero inadimplencia.
-                        </p>
                     </div>
 
                     <!-- ROI Metrics Grid -->
@@ -1509,7 +1604,7 @@ Mensal: R$ ${feeMensalVal.toFixed(2)}
                         <!-- Time Spent Card -->
                         <div class="bg-card-light/40 border border-card-light rounded-2xl p-6 transition-all hover:scale-[1.02] hover:border-warning/30 hover:bg-card-light/60 flex flex-col justify-between shadow-lg">
                             <div class="flex items-center justify-between mb-4">
-                                <span class="text-xs font-bold text-warning uppercase tracking-wider">Tempo Desperdiçado</span>
+                                <span class="text-xs font-bold text-warning uppercase tracking-wider">Tempo Desperdiçado - Sem Partidinha</span>
                                 <div class="w-8 h-8 rounded-lg bg-warning/15 flex items-center justify-center text-warning">
                                     <i data-lucide="clock" class="w-4 h-4"></i>
                                 </div>
@@ -1527,7 +1622,7 @@ Mensal: R$ ${feeMensalVal.toFixed(2)}
                         <!-- Money Lost Card -->
                         <div class="bg-card-light/40 border border-card-light rounded-2xl p-6 transition-all hover:scale-[1.02] hover:border-red-400/30 hover:bg-card-light/60 flex flex-col justify-between shadow-lg">
                             <div class="flex items-center justify-between mb-4">
-                                <span class="text-xs font-bold text-red-400 uppercase tracking-wider">Prejuízo Estimado</span>
+                                <span class="text-xs font-bold text-red-400 uppercase tracking-wider">Prejuízo Estimado - Sem Partidinha</span>
                                 <div class="w-8 h-8 rounded-lg bg-red-400/15 flex items-center justify-center text-red-400">
                                     <i data-lucide="dollar-sign" class="w-4 h-4"></i>
                                 </div>
@@ -1548,14 +1643,14 @@ Mensal: R$ ${feeMensalVal.toFixed(2)}
                                 <i data-lucide="shield-check" class="w-24 h-24"></i>
                             </div>
                             <div class="flex items-center justify-between mb-4 relative z-10">
-                                <span class="text-xs font-bold text-success uppercase tracking-wider">Com Partidinha</span>
+                                <span class="text-xs font-bold text-success uppercase tracking-wider">Com App Partidinha</span>
                                 <div class="w-8 h-8 rounded-lg bg-success/15 flex items-center justify-center text-success">
                                     <i data-lucide="zap" class="w-4 h-4"></i>
                                 </div>
                             </div>
                             <div class="relative z-10">
                                 <div class="text-lg md:text-xl font-black text-success mb-1">
-                                    Menos de 5 min <span class="text-white text-xs font-normal">/ sem</span>
+                                    ~5 min <span class="text-white text-xs font-normal">/ semana</span>
                                 </div>
                                 <div class="text-lg md:text-xl font-black text-success mb-2">
                                     R$ 0 <span class="text-white text-xs font-normal">inadimplência</span>
@@ -1579,7 +1674,7 @@ Mensal: R$ ${feeMensalVal.toFixed(2)}
                             
                             <a href="https://app.partidinha.com" target="_blank" rel="noopener noreferrer" 
                                 class="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-success to-[#00e676] hover:brightness-110 text-primary-dark font-extrabold px-8 py-4 rounded-xl text-md md:text-lg shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all">
-                                <span>Experimente agora grátis por 1 mês - acesse aqui</span>
+                                <span>Experimente grátis agora</span>
                                 <i data-lucide="arrow-right" class="w-5 h-5"></i>
                             </a>
                         </div>
@@ -1602,10 +1697,12 @@ Mensal: R$ ${feeMensalVal.toFixed(2)}
             if (tab === 'whatsapp') {
                 wsCol.classList.remove('hidden');
                 appCol.classList.add('hidden');
+                appCol.classList.remove('flex');
                 btnWs.className = 'flex-1 py-2 text-xs font-semibold rounded-lg bg-accent text-primary-dark transition-all flex items-center justify-center gap-1.5';
                 btnApp.className = 'flex-1 py-2 text-xs font-semibold rounded-lg text-text-secondary hover:text-white transition-all flex items-center justify-center gap-1.5';
             } else {
                 appCol.classList.remove('hidden');
+                appCol.classList.add('flex');
                 wsCol.classList.add('hidden');
                 btnApp.className = 'flex-1 py-2 text-xs font-semibold rounded-lg bg-accent text-primary-dark transition-all flex items-center justify-center gap-1.5';
                 btnWs.className = 'flex-1 py-2 text-xs font-semibold rounded-lg text-text-secondary hover:text-white transition-all flex items-center justify-center gap-1.5';
@@ -1642,7 +1739,7 @@ Mensal: R$ ${feeMensalVal.toFixed(2)}
                 const frequency = document.getElementById('frequency').value;
                 const feeAvulso = parseFloat(document.getElementById('fee-avulso').value);
                 const feeMensal = parseFloat(document.getElementById('fee-mensal').value);
-                const listType = document.querySelector('input[name="list-type"]:checked').value;
+                const playersPerGame = parseInt(document.getElementById('avg-players').value, 10);
 
                 if (!groupName) {
                     alert('Por favor, digite o nome do grupo.');
@@ -1654,6 +1751,10 @@ Mensal: R$ ${feeMensalVal.toFixed(2)}
                 }
                 if (isNaN(feeMensal) || feeMensal < 0) {
                     alert('Por favor, digite um valor válido para o mensalista.');
+                    return;
+                }
+                if (isNaN(playersPerGame) || playersPerGame < 1) {
+                    alert('Por favor, digite um número válido de jogadores por jogo.');
                     return;
                 }
 
@@ -1669,7 +1770,8 @@ Mensal: R$ ${feeMensalVal.toFixed(2)}
                     frequencyMultiplier: multiplier,
                     feeAvulso: feeAvulso,
                     feeMensal: feeMensal,
-                    listType: listType,
+                    listType: 'ficticios',
+                    playersPerGame: playersPerGame,
                     step: 1,
                     players: []
                 };
@@ -1703,7 +1805,7 @@ Mensal: R$ ${feeMensalVal.toFixed(2)}
                     btnSendLista.className = 'bg-card-light text-text-secondary font-extrabold px-3 py-1.5 rounded-lg text-xs transition-all flex items-center gap-1 shadow-inner cursor-not-allowed';
 
                     // Send user command
-                    sendUserMessage('/lista');
+                    sendUserMessage('@Partidinha Bot lista');
 
                     // Show bot typing response
                     showTypingIndicator();
@@ -1712,33 +1814,10 @@ Mensal: R$ ${feeMensalVal.toFixed(2)}
                         removeTypingIndicator();
 
                         if (window.gameState.listType === 'ficticios') {
-                            const ficticiosList = ['João', 'Pedro', 'André', 'Zeca', 'Bruno', 'Carlos', 'Felipe', 'Gustavo', 'Lucas', 'Mateus', 'Rafael', 'Rodrigo', 'Daniel', 'Diego', 'Gabriel'];
+                            const ficticiosList = generateFicticiosPlayers(window.gameState.playersPerGame);
                             window.gameState.players = ficticiosList;
 
-                            const gameDate = getNextGameDate(window.gameState.gameDay);
-                            const listMsg = `⚽️ ${window.gameState.groupName} (${window.gameState.gameDay}, ${gameDate} 19:00) ⚽️
-
-📌 LISTA DO GRUPO
-
-1. João
-2. Pedro
-3. André
-4. Zeca
-5. Bruno
-6. Carlos
-7. Felipe
-8. Gustavo
-9. Lucas
-10. Mateus
-11. Rafael
-12. Rodrigo
-
-🎽 Suplentes
-• entram automaticamente na lista caso alguém desista
-
-13. Daniel
-14. Diego
-15. Gabriel`;
+                            const listMsg = buildListaMessage(ficticiosList);
 
                             appendBotMessage(listMsg);
                             syncMobileAppScreen();
@@ -1795,7 +1874,7 @@ Mensal: R$ ${feeMensalVal.toFixed(2)}
                         removeTypingIndicator();
 
                         // Bot reply
-                        appendBotMessage('⚠️ Você possui pagamentos pendentes neste grupo. Regularize sua situação com o admin antes de participar.');
+                        appendBotMessage('⚠️ Você possui pagamentos pendentes neste grupo.\nRegularize sua situação com o admin antes de participar.');
 
                         // Show Next step button to advance
                         const nextBtn = document.getElementById('btn-next-step');
@@ -1827,13 +1906,13 @@ Mensal: R$ ${feeMensalVal.toFixed(2)}
                     if (window.gameState.step === 1) {
                         // Switch view on mobile to show app after list retrieval
                         if (window.innerWidth < 768) {
-                            switchMobileTab('app');
+                            switchMobileTab('whatsapp');
                         }
                         goToStep(2);
                     } else if (window.gameState.step === 2) {
                         // Switch view on mobile to show WhatsApp for the billing simulation
                         if (window.innerWidth < 768) {
-                            switchMobileTab('whatsapp');
+                            switchMobileTab('app');
                         }
                         goToStep(3);
                     } else if (window.gameState.step === 3) {
@@ -1847,6 +1926,10 @@ Mensal: R$ ${feeMensalVal.toFixed(2)}
             }
         });
     </script>
+
+    <!-- Cloudflare Web Analytics -->
+    <script defer src='https://static.cloudflareinsights.com/beacon.min.js'
+        data-cf-beacon='{"token": "cb1f8a672bbc4e94a548f2b57230268c"}'></script><!-- End Cloudflare Web Analytics -->
 </body>
 
 </html>
